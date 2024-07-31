@@ -15,7 +15,10 @@ class InputsPage extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.white,
-        title: const Text(' Fitlife',textAlign: TextAlign.center,),
+        title: const Text(
+          ' Fitlife',
+          textAlign: TextAlign.center,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -23,25 +26,20 @@ class InputsPage extends StatelessWidget {
           child: Form(
             key: formKey,
             child: Column(
-                
-             children: [
-              
-              const SizedBox(height: 16),
-              Container(
-                 color: Colors.amber,
-                 height: 320,
-                 child: Image.network('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQ4tC-du51P7Bltqd7b_QUGIyoe1UL6RnX3WbEUmKQT0p3Vd09y',fit: BoxFit.cover,),
+              children: [
+                const SizedBox(height: 16),
+                Container(
+                    color: Colors.amber,
+                    height: 320,
+                    child: Image.asset('assets/imagen1.jpeg')
+                    //Image.network('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQ4tC-du51P7Bltqd7b_QUGIyoe1UL6RnX3WbEUmKQT0p3Vd09y',fit: BoxFit.cover,),
 
-
-
-              ),
+                    ),
                 const SizedBox(height: 16),
                 SizedBox(
-                  
                   width: 250,
                   height: 50,
                   child: CuntomInput(
-                    
                     controller: correoController,
                     label: '                     Correo',
                     icon: Icons.email,
@@ -56,12 +54,14 @@ class InputsPage extends StatelessWidget {
                       if (value != 'rmoralesd@unah.hn') {
                         return 'El correo no es válido';
                       }
-                  
+
                       return null;
                     },
                   ),
                 ),
-              const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 SizedBox(
                   width: 250,
                   height: 50,
@@ -72,19 +72,20 @@ class InputsPage extends StatelessWidget {
                     obscureText: true,
                     maxLength: 30,
                     keyboardType: TextInputType.visiblePassword,
-                   
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'La contraseña es obligatorio';
                       }
-                      if(value != '20202001873'){
+                      if (value != '20202001873') {
                         return 'La contraseña no es válida';
                       }
                       return null;
                     },
                   ),
                 ),
-               const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
@@ -104,8 +105,10 @@ class InputsPage extends StatelessWidget {
                   },
                   child: const Text(
                     ' iniciar sesión',
-                    style: TextStyle(fontSize: 20,color: Colors.white,),
-                    
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 5),
