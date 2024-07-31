@@ -31,7 +31,10 @@ class InputsPage extends StatelessWidget {
                 Container(
                     color: Colors.amber,
                     height: 320,
-                    child: Image.asset('assets/imagen1.jpeg')
+                    child: Image.asset(
+                      'assets/imagen1.jpeg',
+                      fit: BoxFit.cover,
+                    )
                     //Image.network('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQ4tC-du51P7Bltqd7b_QUGIyoe1UL6RnX3WbEUmKQT0p3Vd09y',fit: BoxFit.cover,),
 
                     ),
