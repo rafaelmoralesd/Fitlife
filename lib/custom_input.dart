@@ -1,7 +1,9 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 
 class CuntomInput extends StatelessWidget {
-  const CuntomInput({
+   const CuntomInput({
     super.key,
     required this.controller,
     required this.label,
@@ -33,27 +35,21 @@ class CuntomInput extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       obscureText: obscureText,
+      
       decoration: InputDecoration(
-        hintText: 'Ingrese su $label',
         
-        suffix: InkResponse(
-          splashColor: Colors.teal[50],
+        hintText: '$label',
         
-          onTap: () {
-            print('Mostrar contraseña');
-          },
-          child: const Icon(
-            Icons.remove_red_eye,
-          ),
-        ),
+       
        
         border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(40)),
+          borderSide: BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.all(Radius.circular(30)),
         ),
-        icon: Icon(icon),
-        label: Text(label),
+             filled: true,
+             fillColor: const Color.fromARGB(90, 158, 158, 158),
       ),
-      maxLength: maxLength,
+     
 
      
     );
