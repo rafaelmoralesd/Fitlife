@@ -38,12 +38,13 @@ class CuntomInput extends StatelessWidget {
       
       decoration: InputDecoration(
         
-        hintText: '$label',
+        hintText: label,
         
        
        
         border: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white),
+          
+          borderSide: BorderSide(color: Colors.white, width: 0,),
           borderRadius: BorderRadius.all(Radius.circular(30)),
         ),
              filled: true,

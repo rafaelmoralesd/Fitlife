@@ -121,7 +121,10 @@ final TextEditingController contrasenia2Controller = TextEditingController();
 
                       return null;
                     },
-                  ),CuntomInput(
+                   
+                  ),
+                  const SizedBox(height: 16),
+                  CuntomInput(
                     controller: contrasenia2Controller,
                     label: 'Confirme Contraseña',
                     icon: Icons.lock,

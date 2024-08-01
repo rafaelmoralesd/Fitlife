@@ -38,7 +38,7 @@ class InputsPage extends StatelessWidget {
                     //Image.network('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQ4tC-du51P7Bltqd7b_QUGIyoe1UL6RnX3WbEUmKQT0p3Vd09y',fit: BoxFit.cover,),
 
                     ),
-                const SizedBox(height: 16),
+                
                 SizedBox(
                   width: 250,
                   height: 50,
