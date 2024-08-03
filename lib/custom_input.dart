@@ -42,11 +42,10 @@ class CuntomInput extends StatelessWidget {
         
        
        
-        border: const OutlineInputBorder(
-          
-          borderSide: BorderSide(color: Colors.white, width: 0,),
-          borderRadius: BorderRadius.all(Radius.circular(30)),
-        ),
+        border: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(30)
+         ),
              filled: true,
              fillColor: const Color.fromARGB(90, 158, 158, 158),
       ),
