@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/custom_input.dart';
+import 'package:myapp/principal_page.dart';
 
 class InputsPage extends StatelessWidget {
   InputsPage({super.key});
@@ -16,7 +17,7 @@ class InputsPage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.white,
         title: const Text(
-          ' Fitlife',
+          'Fitlife',
           textAlign: TextAlign.center,
         ),
       ),
@@ -29,22 +30,20 @@ class InputsPage extends StatelessWidget {
               children: [
                 const SizedBox(height: 16),
                 Container(
-                    color: Colors.amber,
-                    height: 320,
-                    child: Image.asset(
-                      'assets/imagen1.jpeg',
-                      fit: BoxFit.cover,
-                    )
-                    //Image.network('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQ4tC-du51P7Bltqd7b_QUGIyoe1UL6RnX3WbEUmKQT0p3Vd09y',fit: BoxFit.cover,),
-
-                    ),
-                
+                  color: Colors.amber,
+                  height: 320,
+                  child: Image.asset(
+                    'assets/imagen1.jpeg',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                const SizedBox(height: 16),
                 SizedBox(
                   width: 250,
                   height: 50,
                   child: CuntomInput(
                     controller: correoController,
-                    label: '                     Correo',
+                    label: 'Correo',
                     icon: Icons.email,
                     maxLength: 50,
                     validator: (value) {
@@ -57,27 +56,24 @@ class InputsPage extends StatelessWidget {
                       if (value != 'rmoralesd@unah.hn') {
                         return 'El correo no es válido';
                       }
-
                       return null;
                     },
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 SizedBox(
                   width: 250,
                   height: 50,
                   child: CuntomInput(
                     controller: contraseniaController,
-                    label: '                 Contraseña',
+                    label: 'Contraseña',
                     icon: Icons.lock,
                     obscureText: true,
                     maxLength: 30,
                     keyboardType: TextInputType.visiblePassword,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'La contraseña es obligatorio';
+                        return 'La contraseña es obligatoria';
                       }
                       if (value != '20202001873') {
                         return 'La contraseña no es válida';
@@ -86,9 +82,7 @@ class InputsPage extends StatelessWidget {
                     },
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
@@ -97,17 +91,13 @@ class InputsPage extends StatelessWidget {
                     if (!formKey.currentState!.validate()) {
                       return;
                     }
-                    Navigator.of(context).pushNamed('inicio');
-                    final data = {
-                      'correo': correoController.text,
-                      'contrasenia': contraseniaController.text,
-                    };
-
-                    print(data);
-                    // Acción
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => PrincipalPage()),
+                    );
                   },
                   child: const Text(
-                    ' iniciar sesión',
+                    'Iniciar sesión',
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.white,
@@ -123,10 +113,11 @@ class InputsPage extends StatelessWidget {
                     ),
                     onPressed: () {
                       Navigator.of(context).pushNamed('registrar');
+
                       // Acción
                     },
                     child: const Text(
-                      ' registrarse',
+                      'Registrarse',
                       style: TextStyle(fontSize: 20, color: Colors.black),
                     ),
                   ),

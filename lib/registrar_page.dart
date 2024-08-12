@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/custom_input.dart';
+import 'package:myapp/principal_page.dart';
 
 class RegistrarPage extends StatelessWidget {
   RegistrarPage({super.key});
 
   final TextEditingController nombreController = TextEditingController();
-  final TextEditingController correoController = TextEditingController();
-  final TextEditingController telefonoController = TextEditingController();
+  final TextEditingController edadController = TextEditingController();
+  final TextEditingController estaturaController = TextEditingController();
+  final TextEditingController pesoController = TextEditingController();
   final TextEditingController contraseniaController = TextEditingController();
   final TextEditingController contrasenia2Controller = TextEditingController();
 
@@ -42,7 +44,7 @@ class RegistrarPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 CuntomInput(
-                  controller: correoController,
+                  controller: edadController,
                   label: 'Edad',
                   maxLength: 50,
                   validator: (value) {
@@ -52,7 +54,7 @@ class RegistrarPage extends StatelessWidget {
                     if (int.tryParse(value) == null) {
                       return 'La edad no es válida';
                     }
-                    if (int.parse(value) < 15) {
+                    if (int.parse(value) < 18) {
                       return 'La edad debe ser mayor a 18';
                     }
 
@@ -61,10 +63,8 @@ class RegistrarPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 CuntomInput(
-                  controller: telefonoController,
+                  controller: estaturaController,
                   label: 'Estatura',
-               
-                  
                   keyboardType: TextInputType.phone,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -74,26 +74,24 @@ class RegistrarPage extends StatelessWidget {
                     if (int.tryParse(value) == null) {
                       return 'La estatura no es válido';
                     }
-                 
+
                     return null;
                   },
                 ),
                 const SizedBox(height: 16),
                 CuntomInput(
-                  controller: telefonoController,
+                  controller: pesoController,
                   label: 'Peso',
-               
-                  
                   keyboardType: TextInputType.phone,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'La estatura es obligatorio';
+                      return 'El peso es obligatorio';
                     }
 
                     if (int.tryParse(value) == null) {
-                      return 'La estatura no es válido';
+                      return 'El peso no es válido';
                     }
-                 
+
                     return null;
                   },
                 ),
@@ -126,13 +124,11 @@ class RegistrarPage extends StatelessWidget {
                 CuntomInput(
                   controller: contrasenia2Controller,
                   label: 'Confirme Contraseña',
-                  
-                  
-                
+                  obscureText: true,
                   keyboardType: TextInputType.visiblePassword,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'La contraseña es obligatorio';
+                      return 'Confirmar la contraseña es obligatorio';
                     }
                     if (value != contraseniaController.text) {
                       return 'Las contraseñas no coinciden';
@@ -148,9 +144,10 @@ class RegistrarPage extends StatelessWidget {
                       return;
                     }
 
-                
-
-                    // Acción
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => PrincipalPage()),
+                    );
                   },
                   child: const Text(
                     ' registrarse',
