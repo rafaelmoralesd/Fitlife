@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:myapp/inputs_page.dart';
+import 'package:myapp/principal_page.dart';
 import 'package:myapp/registrar_page.dart';
-
 
 void main() => runApp(const MyApp());
 
@@ -15,19 +14,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Compemnts App',
       // home: HomePage(),
-      initialRoute: 'inicio ', //esta es la ruta principal
+      initialRoute: 'inicio', //esta es la ruta principal
       routes: {
-        
-        
-       
-        'registrar':(context) =>  RegistrarPage(),
-      
-        'inicio ': (context) => InputsPage(),
-
-        
+        'registrar': (context) => RegistrarPage(),
+        'inicio': (context) => InputsPage(),
+        'principal': (context) => const PrincipalPage(),
       },
       onGenerateRoute: (RouteSettings settings) {
-      
         return MaterialPageRoute(
           builder: (context) => PageNotFound(ruta: settings.name),
         );
