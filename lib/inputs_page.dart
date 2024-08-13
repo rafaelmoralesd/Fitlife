@@ -29,12 +29,14 @@ class InputsPage extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(height: 16),
-                Container(
-                  color: Colors.amber,
-                  height: 320,
-                  child: Image.asset(
-                    'assets/imagen1.jpeg',
-                    fit: BoxFit.cover,
+                Center(
+                  child: Container(
+                    color: Colors.amber,
+                    height: 250,
+                    child: Image.asset(
+                      'assets/imagen1.jpeg',
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -118,6 +120,27 @@ class InputsPage extends StatelessWidget {
                     },
                     child: const Text(
                       'Registrarse',
+                      style: TextStyle(fontSize: 20, color: Colors.black),
+                    ),
+                  ),
+                ),
+                 
+                const SizedBox(
+                height: 20,
+                child: Text('ó ')),
+               SizedBox(
+                  height: 30,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(0, 235, 230, 230),
+                    ),
+                    onPressed: () {
+                     
+
+                      // Acción
+                    },
+                    child: const Text(
+                      'Iniciar con Google',
                       style: TextStyle(fontSize: 20, color: Colors.black),
                     ),
                   ),

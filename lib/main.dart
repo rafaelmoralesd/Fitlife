@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Compemnts App',
+      title: 'FitLife',
       // home: HomePage(),
       initialRoute: 'inicio', //esta es la ruta principal
       routes: {
