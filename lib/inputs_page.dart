@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:myapp/custom_input.dart';
-import 'package:myapp/main.dart';
+
 import 'package:myapp/principal_page.dart';
+import 'package:social_auth_buttons/social_auth_buttons.dart';
 
 class InputsPage extends StatelessWidget {
   InputsPage({super.key});
@@ -127,41 +130,17 @@ class InputsPage extends StatelessWidget {
                 ),
                  
                 const SizedBox(
-                height: 20,
+                height: 19,
                 child: Text('ó ')),
+                
                SizedBox(
                 
                 width: 250,
-                  height: 30,
-                  child: ElevatedButton(
-                    
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(193, 219, 54, 54),
-                    ),
-                    onPressed: () async {
-                      await signInWithGoogle();
-               
-                      // Acción
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      
-                      children: [
-                        Icon(
-                          Icons.email,
-                          color: Color.fromARGB(255, 252, 247, 247),
-             
-                        ),
-                        //SizedBox(width: 10)
-                        Text(
-  
-                          'Iniciar con Google',
-                          style: TextStyle(fontSize: 20, color: Color.fromARGB(255, 255, 253, 253)),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
+                  height: 40,
+                  child:GoogleAuthButton(onPressed: ()async{
+                     await signInWithGoogle();}),
+                  
+               )
               ],
             ),
           ),
@@ -169,4 +148,22 @@ class InputsPage extends StatelessWidget {
       ),
     );
   }
+}
+
+
+Future<UserCredential> signInWithGoogle() async {
+  // Trigger the authentication flow
+  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+  // Obtain the auth details from the request
+  final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+  // Create a new credential
+  final credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth?.accessToken,
+    idToken: googleAuth?.idToken,
+  );
+
+  // Once signed in, return the UserCredential
+  return await FirebaseAuth.instance.signInWithCredential(credential);
 }
