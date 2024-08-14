@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/custom_input.dart';
+import 'package:myapp/main.dart';
 import 'package:myapp/principal_page.dart';
 
 class InputsPage extends StatelessWidget {
@@ -129,19 +130,35 @@ class InputsPage extends StatelessWidget {
                 height: 20,
                 child: Text('ó ')),
                SizedBox(
+                
+                width: 250,
                   height: 30,
                   child: ElevatedButton(
+                    
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(0, 235, 230, 230),
+                      backgroundColor: Color.fromARGB(193, 219, 54, 54),
                     ),
-                    onPressed: () {
-                     
-
+                    onPressed: () async {
+                      await signInWithGoogle();
+               
                       // Acción
                     },
-                    child: const Text(
-                      'Iniciar con Google',
-                      style: TextStyle(fontSize: 20, color: Colors.black),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      
+                      children: [
+                        Icon(
+                          Icons.email,
+                          color: Color.fromARGB(255, 252, 247, 247),
+             
+                        ),
+                        //SizedBox(width: 10)
+                        Text(
+  
+                          'Iniciar con Google',
+                          style: TextStyle(fontSize: 20, color: Color.fromARGB(255, 255, 253, 253)),
+                        ),
+                      ],
                     ),
                   ),
                 )
