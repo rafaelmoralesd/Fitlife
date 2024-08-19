@@ -1,4 +1,5 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -23,11 +24,18 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'FitLife',
-      // home: HomePage(),
-      initialRoute: 'inicio', //esta es la ruta principal
+       home: StreamBuilder(stream: FirebaseAuth.instance.authStateChanges(), builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
+        if (snapshot.hasData) {
+          return const PrincipalPage();
+        } else {
+          return InputsPage();
+        }
+      },),
+     //esta es la ruta principal
       routes: {
-        'registrar': (context) => RegistrarPage(),
         'inicio': (context) => InputsPage(),
+        'registrar': (context) => RegistrarPage(),
+        
         'principal': (context) => const PrincipalPage(),
       },
       onGenerateRoute: (RouteSettings settings) {

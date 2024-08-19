@@ -99,7 +99,7 @@ class InputsPage extends StatelessWidget {
                     }
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => PrincipalPage()),
+                      MaterialPageRoute(builder: (context) => const PrincipalPage()),
                     );
                   },
                   child: const Text(
@@ -137,8 +137,13 @@ class InputsPage extends StatelessWidget {
                 
                 width: 250,
                   height: 40,
-                  child:GoogleAuthButton(onPressed: ()async{
-                     await signInWithGoogle();}),
+                  child:GoogleAuthButton(onPressed: (){
+                  
+                     signInWithGoogle();
+                   
+                     
+                     })
+                     
                   
                )
               ],
@@ -148,10 +153,7 @@ class InputsPage extends StatelessWidget {
       ),
     );
   }
-}
-
-
-Future<UserCredential> signInWithGoogle() async {
+  Future<UserCredential> signInWithGoogle() async {
   // Trigger the authentication flow
   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -167,3 +169,6 @@ Future<UserCredential> signInWithGoogle() async {
   // Once signed in, return the UserCredential
   return await FirebaseAuth.instance.signInWithCredential(credential);
 }
+}
+
+
