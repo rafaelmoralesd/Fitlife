@@ -59,7 +59,8 @@ class InputsPage extends StatelessWidget {
                       if (!value.contains('@')) {
                         return 'El correo no es válido';
                       }
-                      if (value != 'rmoralesd@unah.hn') {
+                      if (value == 'rmoralesd@unah.hn' &&
+                          value == 'fj.murillo@unah.hn') {
                         return 'El correo no es válido';
                       }
                       return null;
@@ -81,7 +82,7 @@ class InputsPage extends StatelessWidget {
                       if (value == null || value.isEmpty) {
                         return 'La contraseña es obligatoria';
                       }
-                      if (value != '20202001873') {
+                      if (value == '20202001873' && value == '20222001186') {
                         return 'La contraseña no es válida';
                       }
                       return null;
@@ -99,7 +100,8 @@ class InputsPage extends StatelessWidget {
                     }
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => const PrincipalPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const PrincipalPage()),
                     );
                   },
                   child: const Text(
@@ -128,24 +130,13 @@ class InputsPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                 
-                const SizedBox(
-                height: 19,
-                child: Text('ó ')),
-                
-               SizedBox(
-                
-                width: 250,
-                  height: 40,
-                  child:GoogleAuthButton(onPressed: (){
-                  
-                     signInWithGoogle();
-                   
-                     
-                     })
-                     
-                  
-               )
+                const SizedBox(height: 19, child: Text('ó ')),
+                SizedBox(
+                    width: 250,
+                    height: 40,
+                    child: GoogleAuthButton(onPressed: () {
+                      signInWithGoogle();
+                    }))
               ],
             ),
           ),
@@ -153,22 +144,22 @@ class InputsPage extends StatelessWidget {
       ),
     );
   }
+
   Future<UserCredential> signInWithGoogle() async {
-  // Trigger the authentication flow
-  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-  // Obtain the auth details from the request
-  final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
 
-  // Create a new credential
-  final credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth?.accessToken,
-    idToken: googleAuth?.idToken,
-  );
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
 
-  // Once signed in, return the UserCredential
-  return await FirebaseAuth.instance.signInWithCredential(credential);
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
 }
-}
-
-
