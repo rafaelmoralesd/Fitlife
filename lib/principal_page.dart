@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/crearRutina.dart';
+
 import 'package:table_calendar/table_calendar.dart';
 
 class PrincipalPage extends StatefulWidget {
@@ -24,9 +26,10 @@ class _PrincipalPageState extends State<PrincipalPage> {
           //   currentIndex = value;
           // },
           children: [
+            
             const HomeMenuPage(),
             const CalendarioPage(),
-            Container(color: Color.fromARGB(255, 4, 230, 255)),
+            Container(color: Colors.white,),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -35,25 +38,51 @@ class _PrincipalPageState extends State<PrincipalPage> {
             setState(() {});
             currentIndex = value;
 
-            // _pageController.jumpToPage(value);
+             _pageController.jumpToPage(value);
 
             _pageController.animateToPage(
               value,
               duration: const Duration(milliseconds: 300),
-              curve: Curves.easeIn,
+             curve: Curves.easeIn,
+            ); 
+
+             if (value == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>  Crearrutina(),
+              ),
             );
-          },
-          backgroundColor: Colors.blueAccent,
-          selectedItemColor: Colors.white,
+          } else {
+            // Si no, navega usando el PageView
+            _pageController.animateToPage(
+              value,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          }
+            
+            
+            },
+            
+          
+          backgroundColor: const Color.fromARGB(255, 229, 233, 240),
+          selectedItemColor: Colors.black,
           unselectedItemColor: Colors.black,
           items: const [
             BottomNavigationBarItem(
               label: 'Principal',
               icon: Icon(Icons.home),
             ),
+            
             BottomNavigationBarItem(
               label: 'Calendario',
               icon: Icon(Icons.calendar_month_outlined),
+              
+            ),
+             BottomNavigationBarItem(
+              label: 'Rutina',
+              icon: Icon(Icons.fitness_center_outlined),
             ),
             BottomNavigationBarItem(
               label: 'Perfil',
@@ -79,7 +108,7 @@ class HomeMenuPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("Home Menu Page cargado");
-    return Container(color: Color.fromARGB(255, 4, 230, 255));
+    return Container(color: Colors.white,);
   }
 }
 

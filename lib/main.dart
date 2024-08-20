@@ -2,11 +2,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/RutinaPage.dart';
+import 'package:myapp/crearRutina.dart';
 
 import 'package:myapp/firebase_options.dart';
 import 'package:myapp/inputs_page.dart';
 import 'package:myapp/principal_page.dart';
 import 'package:myapp/registrar_page.dart';
+
 
 Future<void> main() async {
    WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +40,7 @@ class MyApp extends StatelessWidget {
         'registrar': (context) => RegistrarPage(),
         
         'principal': (context) => const PrincipalPage(),
+        'rutina': (context) =>  Crearrutina(),
       },
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
