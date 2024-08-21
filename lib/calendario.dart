@@ -15,30 +15,52 @@ class _CalendarioPageState extends State<CalendarioPage> {
 
   DateTime ahora = DateTime.now();
   DateTime? _diaseleccionado;
-  Map<DateTime, List<dynamic>> eventos = {};
+  Map<DateTime, List<Eventos>> eventos = {};
   TextEditingController _eventController = TextEditingController();
-  // late final ValueNotifier<list<Eventos>> _eventoseleccionado;
-
-  void _diaSeleccionado(DateTime dia, DateTime focusedDay) {
-    setState(() {
-      ahora = dia;
-    });
-  }
+  late final ValueNotifier<List<Eventos>> _eventoseleccionado;
 
   @override
   void initState() {
     super.initState();
-    // _eventoseleccionado = ValueNotifier(_getevents(_diaseleccionado));
+    _diaseleccionado = ahora;
+    _eventoseleccionado = ValueNotifier(_getevents(_diaseleccionado!));
   }
 
   @override
   void dispose() {
+    _eventController.dispose();
+    _eventoseleccionado.dispose();
     super.dispose();
   }
-/*List<Eventos> _getevents(DateTime day) {
-    return eventos[day]??[];
+
+  List<Eventos> _getevents(DateTime day) {
+    return eventos[day] ?? [];
   }
-*/
+
+  void _diaSeleccionado(DateTime dia, DateTime focusedDay) {
+    setState(() {
+      ahora = dia;
+      _diaseleccionado = dia;
+      _eventoseleccionado.value = _getevents(dia);
+    });
+  }
+
+  void _agregarEvento() {
+    if (_diaseleccionado != null && _eventController.text.isNotEmpty) {
+      setState(() {
+        // Añadir el evento al día seleccionado
+        if (eventos[_diaseleccionado] == null) {
+          eventos[_diaseleccionado!] = [];
+        }
+        eventos[_diaseleccionado!]!.add(Eventos(_eventController.text));
+
+        // Actualizar la lista de eventos seleccionados
+        _eventoseleccionado.value = _getevents(_diaseleccionado!);
+      });
+      _eventController.clear();
+      Navigator.of(context).pop();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,32 +71,28 @@ class _CalendarioPageState extends State<CalendarioPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  scrollable: true,
-                  title: Text('Nombre del evento'),
-                  content: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: _eventController,
-                    ),
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                scrollable: true,
+                title: const Text('Nombre del evento'),
+                content: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: _eventController,
                   ),
-                  actions: [
-                    ElevatedButton(
-                      onPressed: () {
-                        eventos.addAll({
-                          _diaseleccionado!: [Eventos(_eventController.text)]
-                        });
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('Agregar'),
-                    )
-                  ],
-                );
-              });
+                ),
+                actions: [
+                  ElevatedButton(
+                    onPressed: _agregarEvento,
+                    child: const Text('Agregar'),
+                  ),
+                ],
+              );
+            },
+          );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       body: Column(
         children: [
@@ -109,19 +127,47 @@ class _CalendarioPageState extends State<CalendarioPage> {
               ),
               outsideDaysVisible: false,
             ),
-            /*
-            onFormatChanged: (format) {
-              if (_calendarFormat != format) {
-                setState(() {
-                  _calendarFormat = format;
-                });
-              }
-            },
-            onPageChanged: (focusedDay) {
-              focusedDay = focusedDay;
-            },*/
           ),
-          const SizedBox(height: 8.0)
+          const SizedBox(height: 8.0),
+          Expanded(
+            child: ValueListenableBuilder<List<Eventos>>(
+              valueListenable: _eventoseleccionado,
+              builder: (context, value, _) {
+                return ListView.builder(
+                  itemCount: value.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: Colors.blueAccent,
+                          width: 2,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 3,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        value[index].titulo,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
         ],
       ),
     );

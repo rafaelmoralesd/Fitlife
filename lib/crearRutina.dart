@@ -25,33 +25,35 @@ class _RutinaCreationPageState extends State<Crearrutina> {
     _loadUserData();
     _loadRoutines();
   }
-void _showErrorDialog(String message) {
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text('Error'),
-      content: Text(message),
-      actions: [
-        TextButton(
-          child: Text('OK'),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ],
-    ),
-  );
-}
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            child: Text('OK'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> _fetchRoutine() async {
     final age = _ageController.text;
     final weight = _weightController.text;
     final height = _heightController.text;
 
-      if (age.isEmpty || weight.isEmpty || height.isEmpty) {
-    _showErrorDialog('La edad, peso y estatura son obligatorios para obtener una rutina recomendada.');
-    return;
-  }
-
+    if (age.isEmpty || weight.isEmpty || height.isEmpty) {
+      _showErrorDialog(
+          'La edad, peso y estatura son obligatorios para obtener una rutina recomendada.');
+      return;
+    }
 
     final response = await http.get(Uri.parse(
         'https://example.com/api/routine?age=$age&weight=$weight&height=$height'));
@@ -84,9 +86,8 @@ void _showErrorDialog(String message) {
     final routines = prefs.getStringList('routines') ?? [];
 
     setState(() {
-      _createdRoutines = routines
-          .map((r) => json.decode(r) as Map<String, dynamic>)
-          .toList();
+      _createdRoutines =
+          routines.map((r) => json.decode(r) as Map<String, dynamic>).toList();
     });
   }
 
@@ -127,6 +128,26 @@ void _showErrorDialog(String message) {
       ),
     );
   }
+
+  List<String> listamuscle = [
+    'abdominales',
+    'abductores',
+    'aductores',
+    'bíceps',
+    'pantorrillas',
+    'pecho',
+    'antebrazos',
+    'glúteos',
+    'hamstrings',
+    'lumbares',
+    'espalda media',
+    'cuello',
+    'cuádriceps',
+    'trapecios',
+    'tríceps'
+  ];
+
+  List<String> listadifficulty = ['principiante', 'intermedio', 'avanzado'];
 
   @override
   Widget build(BuildContext context) {
@@ -169,12 +190,28 @@ void _showErrorDialog(String message) {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
+                DropdownButtonFormField<String>(
+                  items: listamuscle.map((String muscle) {
+                    return DropdownMenuItem<String>(
+                      child: Text(muscle),
+                      value: muscle,
+                    );
+                  }).toList(),
+                  onChanged: (String? value) {
+                    print(value);
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Selecciona un musculo (ocional)',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
                     _fetchRoutine();
                     _saveUserData();
                   },
-                  child: const Text('Obener una rutina recomendada'),
+                  child: const Text('Obtener una rutina recomendada'),
                 ),
                 const SizedBox(height: 16),
                 const Text('Rutina Recomendada:'),
@@ -199,31 +236,38 @@ void _showErrorDialog(String message) {
                 const SizedBox(height: 16),
                 Text('Rutinas Creadas:', textAlign: TextAlign.center),
                 const SizedBox(height: 8),
-                 const Text('Presione  para iniciar cualquier rutina :', textAlign: TextAlign.center),
+                const Text('Presione para iniciar cualquier rutina:',
+                    textAlign: TextAlign.center),
                 const SizedBox(height: 8),
                 if (_createdRoutines.isEmpty)
-                  const Text('No hay rutinas creadas.',textAlign: TextAlign.center,style: TextStyle( color: Colors.red, ),)
+                  const Text(
+                    'No hay rutinas creadas.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  )
                 else
-                Column(
-                  children: _createdRoutines.asMap().entries.map((entry) {
-                    int index = entry.key;
-                    Map<String, dynamic> routine = entry.value;
-                    return ListTile(
-                      title: Text(routine['name']),
-                      subtitle: Text('${routine['exercises'].length} ejercicios'),
-                      trailing: IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () {
-                          _deleteRoutine(index);
+                  Column(
+                    children: _createdRoutines.asMap().entries.map((entry) {
+                      int index = entry.key;
+                      Map<String, dynamic> routine = entry.value;
+                      return ListTile(
+                        title: Text(routine['name']),
+                        subtitle:
+                            Text('${routine['exercises'].length} ejercicios'),
+                        trailing: IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () {
+                            _deleteRoutine(index);
+                          },
+                        ),
+                        onTap: () {
+                          _startRoutine(context, routine);
                         },
-                      ),
-                      onTap: () {
-                        _startRoutine(context, routine);
-                      },
-                    );
-                  }).toList(),
-                ),
-              
+                      );
+                    }).toList(),
+                  ),
               ],
             ),
           ),
