@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:myapp/CustomRoutinePage.dart';
 import 'package:myapp/DetalleRutinaPage.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Crearrutina extends StatefulWidget {
@@ -124,6 +123,9 @@ class _RutinaCreationPageState extends State<Crearrutina> {
         builder: (context) => DetalleRutinaPage(
           exercises: routine['exercises'],
           routineName: routine['name'],
+          onEjerciciosActualizados: (date, exerciseStatus) {
+            // Aquí deberías implementar la lógica para actualizar los ejercicios
+          },
         ),
       ),
     );
@@ -201,7 +203,7 @@ class _RutinaCreationPageState extends State<Crearrutina> {
                     print(value);
                   },
                   decoration: InputDecoration(
-                    labelText: 'Selecciona un musculo (ocional)',
+                    labelText: 'Selecciona un músculo (opcional)',
                     border: OutlineInputBorder(),
                   ),
                 ),

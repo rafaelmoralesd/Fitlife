@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/DetalleRutinaPage.dart';
+import 'package:myapp/DetalleRutinaPage.dart'; // Asegúrate de que el import sea correcto
 
 class RutinaPage extends StatelessWidget {
   final List<Map<String, dynamic>> createdRoutines;
@@ -32,6 +32,9 @@ class RutinaPage extends StatelessWidget {
                   builder: (context) => DetalleRutinaPage(
                     exercises: routine['exercises'],
                     routineName: routine['name'],
+                    onEjerciciosActualizados: (date, exerciseStatus) {
+                      // Aquí deberías implementar la lógica para actualizar los ejercicios
+                    },
                   ),
                 ),
               );
@@ -65,6 +68,7 @@ class RutinaPage extends StatelessWidget {
             TextButton(
               child: Text('Eliminar'),
               onPressed: () {
+                // Aquí deberías implementar la lógica para eliminar la rutina
                 Navigator.of(context).pop();
               },
             ),

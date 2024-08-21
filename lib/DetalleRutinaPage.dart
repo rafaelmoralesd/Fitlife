@@ -4,11 +4,14 @@ import 'package:myapp/ExerciseDetailPage.dart'; // Asegúrate de que el import s
 class DetalleRutinaPage extends StatefulWidget {
   final List<dynamic> exercises;
   final String routineName;
+  final Function(DateTime, List<int>)
+      onEjerciciosActualizados; // Agregamos el callback
 
   const DetalleRutinaPage({
     Key? key,
     required this.exercises,
     required this.routineName,
+    required this.onEjerciciosActualizados, // Inicializamos el callback
   }) : super(key: key);
 
   @override
@@ -31,19 +34,28 @@ class _DetalleRutinaPageState extends State<DetalleRutinaPage> {
   }
 
   void _finishRoutine() {
-    final completedCount = _completedExercises.where((completed) => completed).length;
+    final completedCount =
+        _completedExercises.where((completed) => completed).length;
     final totalExercises = widget.exercises.length;
-    
+
+    // Aquí necesitamos pasar la información al callback
+    widget.onEjerciciosActualizados(
+        DateTime.now(),
+        List<int>.generate(
+            totalExercises, (index) => _completedExercises[index] ? 1 : 0));
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text('Resumen de Rutina'),
-        content: Text('Has completado $completedCount de $totalExercises ejercicios.'),
+        content: Text(
+            'Has completado $completedCount de $totalExercises ejercicios.'),
         actions: [
           TextButton(
             child: Text('OK'),
             onPressed: () {
               Navigator.pop(context);
+              Navigator.pop(context); // Regresar a la página de calendario
             },
           ),
         ],
@@ -81,7 +93,8 @@ class _DetalleRutinaPageState extends State<DetalleRutinaPage> {
                     },
                   ),
                   title: Text(exercise['name']),
-                  subtitle: Text('${exercise['duration']} minutos\n${exercise['description']}'),
+                  subtitle: Text(
+                      '${exercise['duration']} minutos\n${exercise['description']}'),
                   onTap: () {
                     Navigator.push(
                       context,

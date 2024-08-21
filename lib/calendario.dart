@@ -203,6 +203,8 @@ class _CalendarioPageState extends State<CalendarioPage> {
               builder: (context) => DetalleRutinaPage(
                 exercises: [], // Pasa los datos necesarios
                 routineName: '', // Pasa los datos necesarios
+                onEjerciciosActualizados:
+                    _actualizarEjercicios, // Agregamos el callback
               ),
             ),
           );
