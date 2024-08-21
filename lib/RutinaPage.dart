@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:myapp/DetalleRutinaPage.dart'; // Asegúrate de tener esta importación
+import 'package:myapp/DetalleRutinaPage.dart';
 
 class RutinaPage extends StatefulWidget {
   @override
@@ -23,9 +23,8 @@ class _RutinaPageState extends State<RutinaPage> {
     final routines = prefs.getStringList('routines') ?? [];
 
     setState(() {
-      _createdRoutines = routines
-          .map((r) => json.decode(r) as Map<String, dynamic>)
-          .toList();
+      _createdRoutines =
+          routines.map((r) => json.decode(r) as Map<String, dynamic>).toList();
     });
   }
 
@@ -36,9 +35,7 @@ class _RutinaPageState extends State<RutinaPage> {
         builder: (context) => DetalleRutinaPage(
           exercises: routine['exercises'],
           routineName: routine['name'],
-          onEjerciciosActualizados: (date, exerciseStatus) {
-            // Implementa la lógica para actualizar los ejercicios aquí
-          },
+          onEjerciciosActualizados: (date, exerciseStatus) {},
         ),
       ),
     );
@@ -62,7 +59,7 @@ class _RutinaPageState extends State<RutinaPage> {
       appBar: AppBar(
         title: Text('Rutinas Creadas'),
         backgroundColor: Color.fromARGB(255, 184, 192, 241),
-        automaticallyImplyLeading: true, // Mostrar botón de regreso
+        automaticallyImplyLeading: true,
       ),
       body: Center(
         child: Padding(
@@ -79,7 +76,8 @@ class _RutinaPageState extends State<RutinaPage> {
                     final routine = _createdRoutines[index];
                     return ListTile(
                       title: Text(routine['name']),
-                      subtitle: Text('${routine['exercises'].length} ejercicios'),
+                      subtitle:
+                          Text('${routine['exercises'].length} ejercicios'),
                       trailing: IconButton(
                         icon: Icon(Icons.delete),
                         onPressed: () {

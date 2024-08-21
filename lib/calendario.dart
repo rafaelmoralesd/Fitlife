@@ -1,8 +1,7 @@
-// lib/calendario.dart
 import 'package:flutter/material.dart';
 import 'package:myapp/RutinaPage.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:myapp/DetalleRutinaPage.dart';
+//import 'package:myapp/DetalleRutinaPage.dart';
 import 'package:myapp/eventos.dart';
 
 class CalendarioPage extends StatefulWidget {
@@ -48,7 +47,6 @@ class _CalendarioPageState extends State<CalendarioPage> {
 
   void _agregarEvento() {
     if (_diaseleccionado != null && _eventController.text.isNotEmpty) {
-      // Implementar lógica para agregar eventos si es necesario
       _eventController.clear();
       Navigator.of(context).pop();
     }
@@ -61,42 +59,41 @@ class _CalendarioPageState extends State<CalendarioPage> {
   }
 
   Color _getDayColor(DateTime day) {
-    List<int> ejerciciosRealizados = ejercicios[day] ?? [];
-    int totalEjercicios = 5; // Número total de ejercicios por día
-    int ejerciciosCompletos = ejerciciosRealizados.length;
+    List<int>? ejerciciosRealizados = ejercicios[day];
+    int totalEjercicios = 5;
+    int ejerciciosCompletos = ejerciciosRealizados?.length ?? 0;
 
     if (ejerciciosCompletos == 0) {
-      return Colors.redAccent; // No se realizaron ejercicios
+      return Colors.redAccent;
     } else if (ejerciciosCompletos > 0 &&
         ejerciciosCompletos < totalEjercicios) {
-      return Colors.yellowAccent; // Se hicieron algunos, pero no todos
+      return Colors.yellowAccent;
     } else {
-      return Colors.greenAccent; // Se completaron todos los ejercicios
+      return Colors.greenAccent;
     }
   }
 
   Color _getSelectedDayColor(DateTime day) {
     Color baseColor = _getDayColor(day);
-    return baseColor
-        .withOpacity(0.5); // Color del día seleccionado con transparencia
+    return baseColor.withOpacity(0.5);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 223, 150, 178),
+        backgroundColor: const Color.fromARGB(255, 223, 150, 178),
         title: const Text('Calendario'),
         automaticallyImplyLeading: false,
       ),
       body: Container(
-          decoration: const BoxDecoration(
-                image: DecorationImage(
-                  opacity: 0.4,
-                  image: AssetImage('assets/fitlife2.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            opacity: 0.4,
+            image: AssetImage('assets/fitlife2.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Column(
           children: [
             const SizedBox(height: 16),
@@ -115,7 +112,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
               calendarFormat: _calendarFormat,
               calendarStyle: CalendarStyle(
                 outsideDaysVisible: false,
-                todayDecoration: BoxDecoration(
+                todayDecoration: const BoxDecoration(
                   color: Colors.blueAccent,
                   shape: BoxShape.circle,
                 ),
@@ -123,7 +120,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
                   color: _getSelectedDayColor(_diaseleccionado!),
                   shape: BoxShape.circle,
                 ),
-                markerDecoration: BoxDecoration(
+                markerDecoration: const BoxDecoration(
                   shape: BoxShape.circle,
                 ),
                 cellMargin: const EdgeInsets.all(6),
@@ -212,7 +209,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => RutinaPage()
+              builder: (context) => RutinaPage(),
             ),
           );
         },
