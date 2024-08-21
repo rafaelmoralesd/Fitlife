@@ -18,12 +18,16 @@ class _PrincipalPageState extends State<PrincipalPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
+      
         body: PageView(
           controller: _pageController,
           physics: const NeverScrollableScrollPhysics(),
           children: [
             const HomeMenuPage(),
             const CalendarioPage(),
+             Crearrutina(),
+            ProfilePage(),
             Container(
               color: Colors.white,
             ),
@@ -43,34 +47,8 @@ class _PrincipalPageState extends State<PrincipalPage> {
               curve: Curves.easeIn,
             );
 
-            if (value == 2) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Crearrutina(),
-                ),
-              );
-            } else {
-              _pageController.animateToPage(
-                value,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-              );
-            }
-              if (value == 3) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProfilePage(),
-                ),
-              );
-            } else {
-              _pageController.animateToPage(
-                value,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-              );
-            }
+       
+           
           },
           backgroundColor: const Color.fromARGB(255, 229, 233, 240),
           selectedItemColor: Colors.black,
@@ -94,11 +72,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
             ),
           ],
         ),
-        floatingActionButton: currentIndex == 3
-            ? FloatingActionButton(
-                onPressed: () {},
-                child: const Icon(Icons.home),
-              )
-            : null);
+       
+            );
   }
 }

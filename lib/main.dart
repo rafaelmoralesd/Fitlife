@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      
       debugShowCheckedModeBanner: false,
       title: 'FitLife',
        home: StreamBuilder(stream: FirebaseAuth.instance.authStateChanges(), builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
@@ -68,7 +69,9 @@ class PageNotFound extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          automaticallyImplyLeading: false, 
+        ),
         body: Center(child: Text('La ruta "$ruta" no existe')));
   }
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:myapp/CustomRoutinePage.dart';
 import 'package:myapp/DetalleRutinaPage.dart';
+import 'package:myapp/principal_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Crearrutina extends StatefulWidget {
@@ -155,14 +156,10 @@ class _RutinaCreationPageState extends State<Crearrutina> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Color.fromARGB(255, 184, 192, 241),
         title: Text('Crear y Seguir Rutinas'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        
       ),
       body: SingleChildScrollView(
         child: Center(

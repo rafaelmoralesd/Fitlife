@@ -86,6 +86,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 223, 150, 178),
         title: const Text('Calendario'),
+        automaticallyImplyLeading: false,
       ),
       body: Container(
           decoration: const BoxDecoration(

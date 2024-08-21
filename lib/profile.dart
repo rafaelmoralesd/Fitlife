@@ -65,20 +65,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Color.fromARGB(255, 206, 55, 118),
         title: Text('Profile'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              
-              MaterialPageRoute(
-                builder: (context) => PrincipalPage(),
-              ),
-            );
-          },
-        ),
+        
         actions: [
           IconButton(
             icon: Icon(Icons.notifications),
