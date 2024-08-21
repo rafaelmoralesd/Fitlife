@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:myapp/CustomRoutinePage.dart';
 import 'package:myapp/DetalleRutinaPage.dart';
-import 'package:myapp/RutinaPage.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Crearrutina extends StatefulWidget {
