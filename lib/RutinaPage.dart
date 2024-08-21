@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/DetalleRutinaPage.dart'; // Asegúrate de que esta importación sea correcta
+import 'package:myapp/DetalleRutinaPage.dart';
 
 class RutinaPage extends StatelessWidget {
   final List<Map<String, dynamic>> createdRoutines;
@@ -14,7 +14,7 @@ class RutinaPage extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new),
           onPressed: () {
-            Navigator.pop(context);  // Regresar a la página anterior
+            Navigator.pop(context);
           },
         ),
       ),
@@ -65,9 +65,7 @@ class RutinaPage extends StatelessWidget {
             TextButton(
               child: Text('Eliminar'),
               onPressed: () {
-                Navigator.of(context).pop();  // Cerrar el diálogo
-                // Aquí deberías manejar la eliminación de la rutina de la lista
-                // Esto requiere que `createdRoutines` sea mutable o se pase de vuelta a la página anterior
+                Navigator.of(context).pop();
               },
             ),
           ],
