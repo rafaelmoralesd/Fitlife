@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/crearRutina.dart';
 import 'package:myapp/calendario.dart';
 import 'package:myapp/inicio.dart';
+import 'package:myapp/profile.dart';
 
 class PrincipalPage extends StatefulWidget {
   const PrincipalPage({super.key});
@@ -47,6 +48,20 @@ class _PrincipalPageState extends State<PrincipalPage> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => Crearrutina(),
+                ),
+              );
+            } else {
+              _pageController.animateToPage(
+                value,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            }
+              if (value == 3) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfilePage(),
                 ),
               );
             } else {
