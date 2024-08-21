@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:myapp/CustomRoutinePage.dart';
 import 'package:myapp/DetalleRutinaPage.dart';
+import 'package:myapp/principal_page.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -157,7 +158,13 @@ class _RutinaCreationPageState extends State<Crearrutina> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context);
+             Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const PrincipalPage(),
+                ),
+              );
+            
           },
         ),
       ),
