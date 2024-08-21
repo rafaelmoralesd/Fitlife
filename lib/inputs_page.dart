@@ -14,28 +14,9 @@ class InputsPage extends StatelessWidget {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  Future<User?> _signInWithGoogle() async {
-    try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) {
-        return null; // El usuario canceló el inicio de sesión
-      }
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
 
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
 
-      final userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      return userCredential.user;
-    } catch (e) {
-      print('Error durante el inicio de sesión con Google: $e');
-      return null;
-    }
-  }
+    
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,22 +137,14 @@ class InputsPage extends StatelessWidget {
                 SizedBox(
                     width: 250,
                     height: 40,
-                    child: GoogleAuthButton(onPressed: () async {
-                     final user = await _signInWithGoogle();
-            if (user != null) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const PrincipalPage()),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Error al iniciar sesión con Google'),
-                ),
-              );
-            }
-                    }))
+                    child: GoogleAuthButton(onPressed:() async{
+                     await signInWithGoogle();
+                      Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const PrincipalPage()),
+                    );
+                    },))
               ],
             ),
           ),
@@ -179,6 +152,21 @@ class InputsPage extends StatelessWidget {
       ),
     );
   }
+Future<UserCredential> signInWithGoogle() async {
+  // Trigger the authentication flow
+  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
+  // Obtain the auth details from the request
+  final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+  // Create a new credential
+  final credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth?.accessToken,
+    idToken: googleAuth?.idToken,
+  );
+
+  // Once signed in, return the UserCredential
+  return await FirebaseAuth.instance.signInWithCredential(credential);
+}
  
 }
