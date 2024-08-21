@@ -36,6 +36,7 @@ class InputsPage extends StatelessWidget {
       return null;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,20 +158,20 @@ class InputsPage extends StatelessWidget {
                     width: 250,
                     height: 40,
                     child: GoogleAuthButton(onPressed: () async {
-                     final user = await _signInWithGoogle();
-            if (user != null) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const PrincipalPage()),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Error al iniciar sesión con Google'),
-                ),
-              );
-            }
+                      final user = await _signInWithGoogle();
+                      if (user != null) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const PrincipalPage()),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Error al iniciar sesión con Google'),
+                          ),
+                        );
+                      }
                     }))
               ],
             ),
@@ -179,6 +180,4 @@ class InputsPage extends StatelessWidget {
       ),
     );
   }
-
- 
 }
