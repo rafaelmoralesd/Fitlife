@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'inputs_page.dart';
+import 'principal_page.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -20,38 +23,62 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
+   _loadDisplayName();
     _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
       setState(() {
         _currentUser = account;
-        displayName = _currentUser?.displayName ?? "Guest User";
+        
       });
     });
     _googleSignIn.signInSilently();
   }
 
-  Future<void> _handleSignIn() async {
-    try {
-      await _googleSignIn.signIn();
-    } catch (error) {
-      print(error);
-    }
+  Future<void> _loadDisplayName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      displayName = prefs.getString('displayName') ?? "Guest User";
+          print('si');
+    });
   }
 
-  Future<void> _handleSignOut() => _googleSignIn.disconnect();
+  Future<void> _saveDisplayName(String newName) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('displayName', newName);
+    print('si');
+  }
+
+  Future<void> _handleSignOut() async {
+    await _googleSignIn.disconnect();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => InputsPage(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Información predeterminada
-    String defaultEmail = "guest@domain.com";
-    String defaultPhotoUrl = "https://via.placeholder.com/150";
-
-    // Usa la información del usuario si está disponible, de lo contrario usa los valores predeterminados
-    String email = _currentUser?.email ?? defaultEmail;
-    String photoUrl = _currentUser?.photoUrl ?? defaultPhotoUrl;
+    String email = _currentUser?.email ?? "guest@domain.com";
+    String photoUrl =
+        _currentUser?.photoUrl ?? "https://via.placeholder.com/150";
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 206, 55, 118),
         title: Text('Profile'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              
+              MaterialPageRoute(
+                builder: (context) => PrincipalPage(),
+              ),
+            );
+          },
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.notifications),
@@ -64,20 +91,20 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
       body: Container(
-          decoration: const BoxDecoration(
-                image: DecorationImage(
-                  opacity: 0.3,
-                  image: AssetImage('assets/imagen 4.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            opacity: 0.2,
+            image: AssetImage('assets/imagen1.jpeg'),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: SingleChildScrollView(
           child: Column(
             children: [
               SizedBox(height: 20),
-              CircleAvatar(
+              const CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage('assets/perfil.jpg'),
+                backgroundImage:AssetImage('assets/perfil.jpg'),
               ),
               SizedBox(height: 10),
               Text(
@@ -93,6 +120,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 icon: Icons.edit,
                 title: 'Edit profile information',
                 onTap: () {
+                   
                   _editDisplayName(context);
                 },
               ),
@@ -121,26 +149,6 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.swap_horiz),
-            label: 'Trans.',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.feed),
-            label: 'Feeds',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance_wallet),
-            label: 'Wallet',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
     );
   }
 
@@ -159,7 +167,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _editDisplayName(BuildContext context) {
-    TextEditingController _nameController = TextEditingController(text: displayName);
+    TextEditingController _nameController =
+        TextEditingController(text: displayName);
 
     showDialog(
       context: context,
@@ -180,9 +189,13 @@ class _ProfilePageState extends State<ProfilePage> {
             TextButton(
               child: Text('Save'),
               onPressed: () {
-                setState(() {
-                  displayName = _nameController.text;
-                });
+                String newDisplayName = _nameController.text.trim();
+                if (newDisplayName.isNotEmpty) {
+                  setState(() {
+                    displayName = newDisplayName;
+                    _saveDisplayName(newDisplayName);
+                  });
+                }
                 Navigator.of(context).pop();
               },
             ),
@@ -247,19 +260,6 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         );
       },
-    );
-  }
-}
-
-// Página ficticia para editar el perfil
-class EditProfilePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Edit Profile")),
-      body: Center(
-        child: Text("Aquí se editará la información del perfil"),
-      ),
     );
   }
 }

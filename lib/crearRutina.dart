@@ -155,6 +155,7 @@ class _RutinaCreationPageState extends State<Crearrutina> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 184, 192, 241),
         title: Text('Crear y Seguir Rutinas'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -203,7 +204,7 @@ class _RutinaCreationPageState extends State<Crearrutina> {
                     print(value);
                   },
                   decoration: InputDecoration(
-                    labelText: 'Selecciona un músculo (opcional)',
+                    labelText: 'Selecciona un musculo (ocional)',
                     border: OutlineInputBorder(),
                   ),
                 ),

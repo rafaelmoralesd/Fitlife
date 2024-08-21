@@ -84,13 +84,16 @@ class _DetalleRutinaPageState extends State<DetalleRutinaPage> {
                 final exercise = widget.exercises[index];
                 return ListTile(
                   leading: Icon(Icons.fitness_center),
-                  trailing: Checkbox(
-                    value: _completedExercises[index],
-                    onChanged: (value) {
-                      setState(() {
-                        _completedExercises[index] = value!;
-                      });
-                    },
+                  trailing: IgnorePointer(
+                    ignoring: true,
+                    child: Checkbox(
+                      value: _completedExercises[index],
+                      onChanged: (value) {
+                        setState(() {
+                          _completedExercises[index] = value!;
+                        });
+                      },
+                    ),
                   ),
                   title: Text(exercise['name']),
                   subtitle: Text(
