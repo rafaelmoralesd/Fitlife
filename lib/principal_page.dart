@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/crearRutina.dart';
 import 'package:myapp/calendario.dart';
+import 'package:myapp/inicio.dart';
 
 class PrincipalPage extends StatefulWidget {
   const PrincipalPage({super.key});
@@ -84,20 +85,5 @@ class _PrincipalPageState extends State<PrincipalPage> {
                 child: const Icon(Icons.home),
               )
             : null);
-  }
-}
-
-//pestaña del menu principal
-class HomeMenuPage extends StatelessWidget {
-  const HomeMenuPage({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    print("Home Menu Page cargado");
-    return Container(
-      color: Colors.white,
-    );
   }
 }
