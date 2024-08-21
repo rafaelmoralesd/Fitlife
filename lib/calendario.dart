@@ -162,6 +162,68 @@ class _CalendarioPageState extends State<CalendarioPage> {
                 },
               ),
             ),
+            const SizedBox(height: 36),
+            // Explicación de los colores
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  
+                  const SizedBox(height: 8.0),
+                  Row(
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        color: Colors.redAccent,
+                      ),
+                      const SizedBox(width: 8.0),
+                      Expanded(
+                        child: Text(
+                          'No se realizaron ejercicios',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4.0),
+                  Row(
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        color: Colors.yellowAccent,
+                      ),
+                      const SizedBox(width: 8.0),
+                      Expanded(
+                        child: Text(
+                          'Se hicieron algunos ejercicios',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4.0),
+                  Row(
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        color: Colors.greenAccent,
+                      ),
+                      const SizedBox(width: 8.0),
+                      Expanded(
+                        child: Text(
+                          'Se completaron todos los ejercicios',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 8.0),
             Expanded(
               child: ValueListenableBuilder<List<Eventos>>(

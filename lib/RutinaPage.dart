@@ -71,10 +71,13 @@ class _RutinaPageState extends State<RutinaPage> {
                   style: TextStyle(color: Colors.red),
                 )
               : ListView.builder(
+
                   itemCount: _createdRoutines.length,
                   itemBuilder: (context, index) {
                     final routine = _createdRoutines[index];
                     return ListTile(
+// Suggested code may be subject to a license. Learn more: ~LicenseLog:1095731649.
+                      leading: Icon(Icons.folder),
                       title: Text(routine['name']),
                       subtitle:
                           Text('${routine['exercises'].length} ejercicios'),

@@ -161,114 +161,123 @@ class _RutinaCreationPageState extends State<Crearrutina> {
         title: Text('Crear y Seguir Rutinas'),
         
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TextField(
-                  controller: _ageController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: 'Edad'),
-                  textAlign: TextAlign.center,
+      body: Container(
+          decoration: const BoxDecoration(
+                image: DecorationImage(
+                  opacity: 0.4,
+                  image: AssetImage('assets/imagen 4.jpg'),
+                  fit: BoxFit.cover,
                 ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: _weightController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: 'Peso (kg)'),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: _heightController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: 'Estatura (cm)'),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                DropdownButtonFormField<String>(
-                  items: listamuscle.map((String muscle) {
-                    return DropdownMenuItem<String>(
-                      child: Text(muscle),
-                      value: muscle,
-                    );
-                  }).toList(),
-                  onChanged: (String? value) {
-                    print(value);
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Selecciona un musculo (ocional)',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    _fetchRoutine();
-                    _saveUserData();
-                  },
-                  child: const Text('Obtener una rutina recomendada'),
-                ),
-                const SizedBox(height: 16),
-                const Text('Rutina Recomendada:'),
-                Text(_apiResponse, textAlign: TextAlign.center),
-                const SizedBox(height: 32),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CustomRoutinePage(
-                          onSaveRoutine: (routine) {
-                            _addCustomRoutine(routine);
-                          },
-                        ),
-                      ),
-                    );
-                    _saveUserData();
-                  },
-                  child: Text('Crear Rutina Personalizada'),
-                ),
-                const SizedBox(height: 16),
-                Text('Rutinas Creadas:', textAlign: TextAlign.center),
-                const SizedBox(height: 8),
-                const Text('Presione para iniciar cualquier rutina:',
-                    textAlign: TextAlign.center),
-                const SizedBox(height: 8),
-                if (_createdRoutines.isEmpty)
-                  const Text(
-                    'No hay rutinas creadas.',
+              ),
+        child: SingleChildScrollView(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  TextField(
+                    controller: _ageController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(labelText: 'Edad'),
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.red,
-                    ),
-                  )
-                else
-                  Column(
-                    children: _createdRoutines.asMap().entries.map((entry) {
-                      int index = entry.key;
-                      Map<String, dynamic> routine = entry.value;
-                      return ListTile(
-                        title: Text(routine['name']),
-                        subtitle:
-                            Text('${routine['exercises'].length} ejercicios'),
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            _deleteRoutine(index);
-                          },
-                        ),
-                        onTap: () {
-                          _startRoutine(context, routine);
-                        },
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: _weightController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(labelText: 'Peso (kg)'),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: _heightController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(labelText: 'Estatura (cm)'),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  DropdownButtonFormField<String>(
+                    items: listamuscle.map((String muscle) {
+                      return DropdownMenuItem<String>(
+                        child: Text(muscle),
+                        value: muscle,
                       );
                     }).toList(),
+                    onChanged: (String? value) {
+                      print(value);
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Selecciona un musculo (ocional)',
+                      border: OutlineInputBorder(),
+                    ),
                   ),
-              ],
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      _fetchRoutine();
+                      _saveUserData();
+                    },
+                    child: const Text('Obtener una rutina recomendada'),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text('Rutina Recomendada:'),
+                  Text(_apiResponse, textAlign: TextAlign.center),
+                  const SizedBox(height: 32),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CustomRoutinePage(
+                            onSaveRoutine: (routine) {
+                              _addCustomRoutine(routine);
+                            },
+                          ),
+                        ),
+                      );
+                      _saveUserData();
+                    },
+                    child: Text('Crear Rutina Personalizada'),
+                  ),
+                  const SizedBox(height: 16),
+                  Text('Rutinas Creadas:', textAlign: TextAlign.center),
+                  const SizedBox(height: 8),
+                  const Text('Presione para iniciar cualquier rutina:',
+                      textAlign: TextAlign.center),
+                  const SizedBox(height: 8),
+                  if (_createdRoutines.isEmpty)
+                    const Text(
+                      'No hay rutinas creadas.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    )
+                  else
+                    Column(
+                      children: _createdRoutines.asMap().entries.map((entry) {
+                        int index = entry.key;
+                        Map<String, dynamic> routine = entry.value;
+                        return ListTile(
+                          title: Text(routine['name']),
+                          subtitle:
+                              Text('${routine['exercises'].length} ejercicios'),
+                          trailing: IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              _deleteRoutine(index);
+                            },
+                          ),
+                          onTap: () {
+                            _startRoutine(context, routine);
+                          },
+                        );
+                      }).toList(),
+                    ),
+                ],
+              ),
             ),
           ),
         ),
