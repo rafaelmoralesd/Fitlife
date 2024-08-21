@@ -79,7 +79,8 @@ class _PrincipalPageState extends State<PrincipalPage> {
             ),
           ],
         ),
-        floatingActionButton: currentIndex == 0
+        /* */
+        floatingActionButton: currentIndex == 3
             ? FloatingActionButton(
                 onPressed: () {},
                 child: const Icon(Icons.home),
