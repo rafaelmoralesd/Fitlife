@@ -14,6 +14,7 @@ class HomeMenuPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.pink[50],
       appBar: AppBar(
+        automaticallyImplyLeading: false, 
         title: Text('FitLife', style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.pink[50],
         elevation: 0,

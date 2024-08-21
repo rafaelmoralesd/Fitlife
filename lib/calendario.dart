@@ -1,5 +1,6 @@
 // lib/calendario.dart
 import 'package:flutter/material.dart';
+import 'package:myapp/RutinaPage.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:myapp/DetalleRutinaPage.dart';
 import 'package:myapp/eventos.dart';
@@ -211,12 +212,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => DetalleRutinaPage(
-                exercises: [], // Pasa los datos necesarios
-                routineName: '', // Pasa los datos necesarios
-                onEjerciciosActualizados:
-                    _actualizarEjercicios, // Agregamos el callback
-              ),
+              builder: (context) => RutinaPage()
             ),
           );
         },

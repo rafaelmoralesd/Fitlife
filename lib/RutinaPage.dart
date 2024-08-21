@@ -1,80 +1,99 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:myapp/DetalleRutinaPage.dart'; // Asegúrate de que el import sea correcto
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:myapp/DetalleRutinaPage.dart'; // Asegúrate de tener esta importación
 
-class RutinaPage extends StatelessWidget {
-  final List<Map<String, dynamic>> createdRoutines;
+class RutinaPage extends StatefulWidget {
+  @override
+  _RutinaPageState createState() => _RutinaPageState();
+}
 
-  const RutinaPage({super.key, required this.createdRoutines});
+class _RutinaPageState extends State<RutinaPage> {
+  List<Map<String, dynamic>> _createdRoutines = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRoutines();
+  }
+
+  Future<void> _loadRoutines() async {
+    final prefs = await SharedPreferences.getInstance();
+    final routines = prefs.getStringList('routines') ?? [];
+
+    setState(() {
+      _createdRoutines = routines
+          .map((r) => json.decode(r) as Map<String, dynamic>)
+          .toList();
+    });
+  }
+
+  void _startRoutine(BuildContext context, Map<String, dynamic> routine) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DetalleRutinaPage(
+          exercises: routine['exercises'],
+          routineName: routine['name'],
+          onEjerciciosActualizados: (date, exerciseStatus) {
+            // Implementa la lógica para actualizar los ejercicios aquí
+          },
+        ),
+      ),
+    );
+  }
+
+  void _deleteRoutine(int index) async {
+    final prefs = await SharedPreferences.getInstance();
+    final routines = prefs.getStringList('routines') ?? [];
+
+    routines.removeAt(index);
+    await prefs.setStringList('routines', routines);
+
+    setState(() {
+      _createdRoutines.removeAt(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Rutina de Ejercicios'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        title: Text('Rutinas Creadas'),
+        backgroundColor: Color.fromARGB(255, 184, 192, 241),
+        automaticallyImplyLeading: true, // Mostrar botón de regreso
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: _createdRoutines.isEmpty
+              ? Text(
+                  'No hay rutinas creadas.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.red),
+                )
+              : ListView.builder(
+                  itemCount: _createdRoutines.length,
+                  itemBuilder: (context, index) {
+                    final routine = _createdRoutines[index];
+                    return ListTile(
+                      title: Text(routine['name']),
+                      subtitle: Text('${routine['exercises'].length} ejercicios'),
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          _deleteRoutine(index);
+                        },
+                      ),
+                      onTap: () {
+                        _startRoutine(context, routine);
+                      },
+                    );
+                  },
+                ),
         ),
       ),
-      body: ListView.builder(
-        itemCount: createdRoutines.length,
-        itemBuilder: (context, index) {
-          final routine = createdRoutines[index];
-          return ListTile(
-            title: Text(routine['name']),
-            subtitle: Text('${routine['exercises'].length} ejercicios'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetalleRutinaPage(
-                    exercises: routine['exercises'],
-                    routineName: routine['name'],
-                    onEjerciciosActualizados: (date, exerciseStatus) {
-                      // Aquí deberías implementar la lógica para actualizar los ejercicios
-                    },
-                  ),
-                ),
-              );
-            },
-            trailing: IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () {
-                _confirmDeleteRoutine(context, index);
-              },
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  void _confirmDeleteRoutine(BuildContext context, int index) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Confirmar Eliminación'),
-          content: Text('¿Estás seguro de que deseas eliminar esta rutina?'),
-          actions: [
-            TextButton(
-              child: Text('Cancelar'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Eliminar'),
-              onPressed: () {
-                // Aquí deberías implementar la lógica para eliminar la rutina
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }
