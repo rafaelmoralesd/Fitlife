@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+<<<<<<< Updated upstream
+=======
+import 'package:myapp/CustomRoutinePage.dart';
+import 'package:myapp/DetalleRutinaPage.dart';
+>>>>>>> Stashed changes
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
