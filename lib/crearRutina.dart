@@ -61,9 +61,8 @@ class _RutinaCreationPageState extends State<Crearrutina> {
 
     final url = Uri.parse(
         'https://api.api-ninjas.com/v1/exercises?age=$age&weight=$weight&height=$height');
-    final response = await http.get(url, headers: {
-      'X-Api-Key': 'v5FcedgLdoJXDuWWp9lG4Q==7aEUmAnYP7FW35vK'
-    });
+    final response = await http.get(url,
+        headers: {'X-Api-Key': 'v5FcedgLdoJXDuWWp9lG4Q==7aEUmAnYP7FW35vK'});
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body) as List<dynamic>;
@@ -365,7 +364,8 @@ class _RecommendedRoutinePageState extends State<RecommendedRoutinePage> {
                   final exercise = _routines[index];
                   return ListTile(
                     title: Text(exercise['name']),
-                    subtitle: Text('${exercise['type']} - ${exercise['difficulty']}'),
+                    subtitle:
+                        Text('${exercise['type']} - ${exercise['difficulty']}'),
                     trailing: _completionStatus[index]
                         ? Icon(Icons.check_circle, color: Colors.green)
                         : Icon(Icons.circle, color: Colors.grey),
@@ -385,39 +385,213 @@ class _RecommendedRoutinePageState extends State<RecommendedRoutinePage> {
   }
 }
 
-// Página para mostrar detalles de un ejercicio
-class ExerciseDetailPage2 extends StatelessWidget {
+class ExerciseDetailPage2 extends StatefulWidget {
   final Map<String, dynamic> exercise;
   final VoidCallback onExerciseCompleted;
 
   ExerciseDetailPage2({required this.exercise, required this.onExerciseCompleted});
 
   @override
+  _ExerciseDetailPage2State createState() => _ExerciseDetailPage2State();
+}
+
+class _ExerciseDetailPage2State extends State<ExerciseDetailPage2> {
+  Timer? _timer;
+  int _remainingTime = 180; // 3 minutos en segundos
+  double _progress = 1.0;
+  bool _exerciseCompleted = false;
+  bool _canComplete = false;
+  String _instructions = 'Cargando instrucciones...';
+  String _imageUrl = ''; // URL de la imagen del ejercicio
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchInstructions();
+    _fetchImage();
+  }
+
+  void _startTimer() {
+    if (_timer != null) {
+      _timer!.cancel();
+    }
+
+    setState(() {
+      _exerciseCompleted = false;
+      _canComplete = false;
+    });
+
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_remainingTime > 0) {
+          _remainingTime--;
+          _progress = _remainingTime / 180;
+        } else {
+          _exerciseCompleted = true;
+          _canComplete = true;
+          _timer!.cancel();
+        }
+      });
+    });
+  }
+
+  Future<void> _fetchInstructions() async {
+     final  exerciseType = widget.exercise['type'];
+    final exerciseName = widget.exercise['name'];
+    final url = Uri.parse('https://api.api-ninjas.com/v1/exercises?$exerciseType=$exerciseName');
+    final response = await http.get(url, headers: {
+      'X-Api-Key': 'v5FcedgLdoJXDuWWp9lG4Q==7aEUmAnYP7FW35vK', // Clave de API
+    });
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body) as List<dynamic>;
+
+      if (data.isNotEmpty) {
+        setState(() {
+          _instructions = data[0]['instructions'] ?? 'No se encontraron instrucciones.';
+        });
+      } else {
+        setState(() {
+          _instructions = 'No se encontraron instrucciones.';
+        });
+      }
+    } else {
+      setState(() {
+        _instructions = 'Error al cargar las instrucciones.';
+      });
+    }
+  }
+
+ Future<void> _fetchImage() async {
+    final exerciseName = widget.exercise['name'];
+    final searchQuery = Uri.encodeComponent(exerciseName + ' exercise'); // Mejorar precisión en la búsqueda
+    final url = Uri.parse('https://api.unsplash.com/search/photos?query=$searchQuery&client_id=cwiyNtUMEtaPg-zHbNPvHnctqLj-Umx9Ik7q8VrKrh4');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['results'].isNotEmpty) {
+        setState(() {
+          _imageUrl = data['results'][0]['urls']['regular'] ?? ''; // Ajusta esto según la respuesta de la API
+        });
+      } else {
+        setState(() {
+          _imageUrl = ''; // Sin imagen relevante
+        });
+      }
+    } else {
+      setState(() {
+        _imageUrl = ''; // Sin imagen relevante
+      });
+    }
+  }
+
+
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final minutes = (_remainingTime ~/ 60).toString().padLeft(2, '0');
+    final seconds = (_remainingTime % 60).toString().padLeft(2, '0');
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(exercise['name']),
+        title: Text(widget.exercise['name']),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text('Tipo: ${exercise['type']}'),
-            Text('Dificultad: ${exercise['difficulty']}'),
-            ElevatedButton(
-              onPressed: () {
-                onExerciseCompleted();
-                Navigator.pop(context);
-              },
-              child: Text('Marcar como completado'),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (_imageUrl.isNotEmpty)
+                  Image.network(
+                    _imageUrl,
+                    height: 200,
+                    width: 200,
+                    fit: BoxFit.cover,
+                  )
+                else
+                  Text(
+                    'Imagen no disponible',
+                    style: TextStyle(fontSize: 16, color: Colors.red),
+                  ),
+                SizedBox(height: 16),
+                Text(
+                  'Nombre: ${widget.exercise['name']}',
+                  style: TextStyle(fontSize: 24),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'Tipo: ${widget.exercise['type']}',
+                  style: TextStyle(fontSize: 18),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'Dificultad: ${widget.exercise['difficulty']}',
+                  style: TextStyle(fontSize: 18),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 32),
+                Text(
+                  'Instrucciones:',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 8),
+                Text(
+                  _instructions,
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 32),
+                ElevatedButton(
+                  onPressed: _startTimer,
+                  child: Text('Empezar Ejercicio'),
+                ),
+                SizedBox(height: 32),
+                Text(
+                  'Tiempo restante: $minutes:$seconds',
+                  style: TextStyle(fontSize: 24),
+                ),
+                SizedBox(height: 16),
+                LinearProgressIndicator(
+                  value: _progress,
+                  backgroundColor: Colors.grey[300],
+                  color: Colors.blue,
+                  minHeight: 10,
+                ),
+                SizedBox(height: 32),
+                ElevatedButton(
+                  onPressed: _canComplete ? () {
+                    widget.onExerciseCompleted();
+                    Navigator.pop(context);
+                  } : null,
+                  child: Text('Marcar como completado'),
+                ),
+                SizedBox(height: 16),
+                if (_exerciseCompleted)
+                  Text(
+                    '¡Ejercicio completado!',
+                    style: TextStyle(fontSize: 24, color: Colors.green),
+                  ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
-
 // Página para mostrar los detalles de la rutina creada
 class DetalleRutinaPage extends StatelessWidget {
   final List<dynamic> exercises;
