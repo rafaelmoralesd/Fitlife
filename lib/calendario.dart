@@ -75,8 +75,11 @@ class _CalendarioPageState extends State<CalendarioPage> {
 
   Color _getSelectedDayColor(DateTime day) {
     Color baseColor = _getDayColor(day);
+    
     return baseColor.withOpacity(0.5);
   }
+  final Color _approvalColor = Colors.transparent; 
+   DateTime? _selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -98,70 +101,77 @@ class _CalendarioPageState extends State<CalendarioPage> {
           children: [
             const SizedBox(height: 16),
             TableCalendar(
-              headerStyle: const HeaderStyle(
-                titleCentered: true,
-                formatButtonVisible: false,
+        focusedDay: DateTime.now(),
+        firstDay: DateTime.utc(2020, 1, 1),
+        lastDay: DateTime.utc(2030, 12, 31),
+        calendarBuilders: CalendarBuilders(
+          // Personalizar el día actual
+          todayBuilder: (context, day, focusedDay) {
+            return Container(
+              margin: const EdgeInsets.all(6.0),
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                shape: BoxShape.circle,
               ),
-              availableGestures: AvailableGestures.all,
-              focusedDay: ahora,
-              selectedDayPredicate: (hoy) => isSameDay(hoy, ahora),
-              firstDay: DateTime.utc(2020, 1, 1),
-              lastDay: DateTime.utc(2030, 12, 31),
-              onDaySelected: _diaSeleccionado,
-              startingDayOfWeek: StartingDayOfWeek.monday,
-              calendarFormat: _calendarFormat,
-              calendarStyle: CalendarStyle(
-                outsideDaysVisible: false,
-                todayDecoration: const BoxDecoration(
-                  color: Colors.blueAccent,
-                  shape: BoxShape.circle,
-                ),
-                selectedDecoration: BoxDecoration(
-                  color: _getSelectedDayColor(_diaseleccionado!),
-                  shape: BoxShape.circle,
-                ),
-                markerDecoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                cellMargin: const EdgeInsets.all(6),
+              alignment: Alignment.center,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Text(
+                    '${day.day}',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  if (_approvalColor != Colors.transparent) // Mostrar ícono si el color es diferente de transparente
+                    Icon(
+                      Icons.check_circle,
+                      color: _approvalColor,
+                      size: 20.0,
+                    ),
+                ],
               ),
-              calendarBuilders: CalendarBuilders(
-                defaultBuilder: (context, day, focusedDay) {
-                  return Container(
-                    margin: const EdgeInsets.all(6.0),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _getDayColor(day),
-                    ),
-                    child: Center(
-                      child: Text(
-                        '${day.day}',
-                        style: const TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                selectedBuilder: (context, day, focusedDay) {
-                  return Container(
-                    margin: const EdgeInsets.all(6.0),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _getSelectedDayColor(day),
-                    ),
-                    child: Center(
-                      child: Text(
-                        '${day.day}',
-                        style: const TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  );
-                },
+            );
+          },
+          // Personalizar los días fuera del mes
+          outsideBuilder: (context, day, focusedDay) {
+            return Container(
+              margin: const EdgeInsets.all(6.0),
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                shape: BoxShape.circle,
               ),
-            ),
+              alignment: Alignment.center,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Text(
+                    '${day.day}',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14.0,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+        calendarStyle: CalendarStyle(
+          todayDecoration: BoxDecoration(
+            color: Colors.transparent,
+            shape: BoxShape.circle,
+          ),
+          outsideDaysVisible: false,
+        ),
+        onDaySelected: (selectedDay, focusedDay) {
+          setState(() {
+            _selectedDate = selectedDay; // Actualizar la fecha seleccionada
+          });
+        },
+      ),
             const SizedBox(height: 36),
             // Explicación de los colores
             Padding(
@@ -170,24 +180,9 @@ class _CalendarioPageState extends State<CalendarioPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   
-                  const SizedBox(height: 8.0),
-                  Row(
-                    children: [
-                      Container(
-                        width: 20,
-                        height: 20,
-                        color: Colors.redAccent,
-                      ),
-                      const SizedBox(width: 8.0),
-                      Expanded(
-                        child: Text(
-                          'No se realizaron ejercicios',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4.0),
+                  const SizedBox(height: 15.0),
+                  
+                  const SizedBox(height: 15.0),
                   Row(
                     children: [
                       Container(
@@ -198,7 +193,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
                       const SizedBox(width: 8.0),
                       Expanded(
                         child: Text(
-                          'Se hicieron algunos ejercicios',
+                          'Se hicieron algunos ejercicios de la rutina',
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ),
@@ -215,7 +210,7 @@ class _CalendarioPageState extends State<CalendarioPage> {
                       const SizedBox(width: 8.0),
                       Expanded(
                         child: Text(
-                          'Se completaron todos los ejercicios',
+                          'Se completaron todos los ejercicios de la rutina',
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ),

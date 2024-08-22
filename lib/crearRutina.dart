@@ -163,11 +163,12 @@ class _RutinaCreationPageState extends State<Crearrutina> {
       ),
     );
   }
+
   void _clearText() {
-  _heightController.clear();
-  _weightController.clear();
-  _ageController.clear();
-}
+    _heightController.clear();
+    _weightController.clear();
+    _ageController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +232,7 @@ class _RutinaCreationPageState extends State<Crearrutina> {
                       onTap: _viewRecommendedRoutine,
                     ),
                   const SizedBox(height: 32),
-                    ElevatedButton(
+                  ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -360,6 +361,7 @@ class _RecommendedRoutinePageState extends State<RecommendedRoutinePage> {
             child: Text('Cerrar'),
             onPressed: () {
               Navigator.pop(context);
+              Navigator.pop(context);
             },
           ),
         ],
@@ -393,8 +395,8 @@ class _RecommendedRoutinePageState extends State<RecommendedRoutinePage> {
                     final exercise = _routines[index];
                     return ListTile(
                       title: Text(exercise['name']),
-                      subtitle:
-                          Text('${exercise['type']} - ${exercise['difficulty']}'),
+                      subtitle: Text(
+                          '${exercise['type']} - ${exercise['difficulty']}'),
                       trailing: _completionStatus[index]
                           ? Icon(Icons.check_circle, color: Colors.green)
                           : Icon(Icons.circle, color: Colors.grey),
@@ -404,7 +406,11 @@ class _RecommendedRoutinePageState extends State<RecommendedRoutinePage> {
                 ),
               ),
               ElevatedButton(
-                onPressed: _showSummary,
+                onPressed: _completionStatus.any((completed) => completed)
+                    ? () {
+                        _showSummary();
+                      }
+                    : null,
                 child: Text('Terminar Rutina'),
               ),
             ],
@@ -419,7 +425,8 @@ class ExerciseDetailPage2 extends StatefulWidget {
   final Map<String, dynamic> exercise;
   final VoidCallback onExerciseCompleted;
 
-  ExerciseDetailPage2({required this.exercise, required this.onExerciseCompleted});
+  ExerciseDetailPage2(
+      {required this.exercise, required this.onExerciseCompleted});
 
   @override
   _ExerciseDetailPage2State createState() => _ExerciseDetailPage2State();
@@ -466,9 +473,10 @@ class _ExerciseDetailPage2State extends State<ExerciseDetailPage2> {
   }
 
   Future<void> _fetchInstructions() async {
-     final  exerciseType = widget.exercise['type'];
+    final exerciseType = widget.exercise['type'];
     final exerciseName = widget.exercise['name'];
-    final url = Uri.parse('https://api.api-ninjas.com/v1/exercises?$exerciseType=$exerciseName');
+    final url = Uri.parse(
+        'https://api.api-ninjas.com/v1/exercises?$exerciseType=$exerciseName');
     final response = await http.get(url, headers: {
       'X-Api-Key': 'v5FcedgLdoJXDuWWp9lG4Q==7aEUmAnYP7FW35vK', // Clave de API
     });
@@ -478,7 +486,8 @@ class _ExerciseDetailPage2State extends State<ExerciseDetailPage2> {
 
       if (data.isNotEmpty) {
         setState(() {
-          _instructions = data[0]['instructions'] ?? 'No se encontraron instrucciones.';
+          _instructions =
+              data[0]['instructions'] ?? 'No se encontraron instrucciones.';
         });
       } else {
         setState(() {
@@ -492,17 +501,20 @@ class _ExerciseDetailPage2State extends State<ExerciseDetailPage2> {
     }
   }
 
- Future<void> _fetchImage() async {
+  Future<void> _fetchImage() async {
     final exerciseName = widget.exercise['name'];
-    final searchQuery = Uri.encodeComponent(exerciseName + ' exercise'); // Mejorar precisión en la búsqueda
-    final url = Uri.parse('https://api.unsplash.com/search/photos?query=$searchQuery&client_id=cwiyNtUMEtaPg-zHbNPvHnctqLj-Umx9Ik7q8VrKrh4');
+    final searchQuery = Uri.encodeComponent(
+        exerciseName + ' exercise'); // Mejorar precisión en la búsqueda
+    final url = Uri.parse(
+        'https://api.unsplash.com/search/photos?query=$searchQuery&client_id=cwiyNtUMEtaPg-zHbNPvHnctqLj-Umx9Ik7q8VrKrh4');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       if (data['results'].isNotEmpty) {
         setState(() {
-          _imageUrl = data['results'][0]['urls']['regular'] ?? ''; // Ajusta esto según la respuesta de la API
+          _imageUrl = data['results'][0]['urls']['regular'] ??
+              ''; // Ajusta esto según la respuesta de la API
         });
       } else {
         setState(() {
@@ -515,8 +527,6 @@ class _ExerciseDetailPage2State extends State<ExerciseDetailPage2> {
       });
     }
   }
-
-
 
   @override
   void dispose() {
@@ -605,10 +615,12 @@ class _ExerciseDetailPage2State extends State<ExerciseDetailPage2> {
                   ),
                   SizedBox(height: 32),
                   ElevatedButton(
-                    onPressed: _canComplete ? () {
-                      widget.onExerciseCompleted();
-                      Navigator.pop(context);
-                    } : null,
+                    onPressed: _canComplete
+                        ? () {
+                            widget.onExerciseCompleted();
+                            Navigator.pop(context);
+                          }
+                        : null,
                     child: Text('Marcar como completado'),
                   ),
                   SizedBox(height: 16),

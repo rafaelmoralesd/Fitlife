@@ -79,7 +79,7 @@ class _CustomRoutinePageState extends State<CustomRoutinePage> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text('Rutina Guardada'),
-        content: Text('Se han guardado ${_exercises.length} ejercicios.'),
+        content: Text('Se han guardado ${_exercises.length} ejercicios a tu rutina.'),
         actions: [
           TextButton(
             child: Text('OK'),

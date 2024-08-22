@@ -93,6 +93,7 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         title: Text('Detalles del Ejercicio'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -102,71 +103,80 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
         ),
       ),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                widget.exerciseName,
-                style: Theme.of(context).textTheme.headlineSmall,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Duración: ${widget.duration} minutos',
-                style: Theme.of(context).textTheme.titleMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Descripción:',
-                style: Theme.of(context).textTheme.titleMedium,
-                textAlign: TextAlign.center,
-              ),
-              Text(
-                widget.description,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              _imageUrl.isNotEmpty
-                  ? Image.network(
-                      _imageUrl,
-                      height: 150, // Puedes ajustar la altura según tus necesidades
-                      width: 150,  // Puedes ajustar el ancho según tus necesidades
-                    )
-                  : CircularProgressIndicator(),
-              const SizedBox(height: 32),
-              LinearProgressIndicator(
-                value: progress,
-                minHeight: 8,
-                color: Colors.blue,
-                backgroundColor: Colors.grey[300],
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Cronómetro: $minutes:$seconds',
-                style: Theme.of(context).textTheme.titleLarge,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _startExercise,
-                child: Text(_isRunning ? 'Ejercicio en Progreso' : 'Empezar Ejercicio'),
-              ),
-              if (_isRunning)
-                ElevatedButton(
-                  onPressed: _stopExercise,
-                  child: Text('Detener Ejercicio'),
+        child: Container(
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                  opacity: 0.4,
+                  image: AssetImage('assets/imagen 4.jpg'),
+                  fit: BoxFit.cover,
                 ),
-              if (_isCompleted)
+              ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
                 Text(
-                  'Ejercicio Completado',
-                  style: TextStyle(color: Colors.green, fontSize: 18),
+                  widget.exerciseName,
+                  style: Theme.of(context).textTheme.headlineSmall,
                   textAlign: TextAlign.center,
                 ),
-            ],
+                const SizedBox(height: 16),
+                Text(
+                  'Duración: ${widget.duration} minutos',
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Descripción:',
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  widget.description,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                _imageUrl.isNotEmpty
+                    ? Image.network(
+                        _imageUrl,
+                        height: 150, // Puedes ajustar la altura según tus necesidades
+                        width: 150,  // Puedes ajustar el ancho según tus necesidades
+                      )
+                    : CircularProgressIndicator(),
+                const SizedBox(height: 32),
+                LinearProgressIndicator(
+                  value: progress,
+                  minHeight: 8,
+                  color: Colors.blue,
+                  backgroundColor: Colors.grey[300],
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Cronómetro: $minutes:$seconds',
+                  style: Theme.of(context).textTheme.titleLarge,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: _startExercise,
+                  child: Text(_isRunning ? 'Ejercicio en Progreso' : 'Empezar Ejercicio'),
+                ),
+                if (_isRunning)
+                  ElevatedButton(
+                    onPressed: _stopExercise,
+                    child: Text('Detener Ejercicio'),
+                  ),
+                if (_isCompleted)
+                  Text(
+                    'Ejercicio Completado',
+                    style: TextStyle(color: Colors.green, fontSize: 18),
+                    textAlign: TextAlign.center,
+                  ),
+              ],
+            ),
           ),
         ),
       ),

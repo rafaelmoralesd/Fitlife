@@ -20,6 +20,8 @@ class DetalleRutinaPage extends StatefulWidget {
 
 class _DetalleRutinaPageState extends State<DetalleRutinaPage> {
   List<bool> _completedExercises = [];
+  
+  
 
   @override
   void initState() {
@@ -34,9 +36,18 @@ class _DetalleRutinaPageState extends State<DetalleRutinaPage> {
   }
 
   void _finishRoutine() {
+      Color color = Colors.transparent;
+    if (_completedExercises.every((completed) => completed)) {
+      color = Colors.green;
+    } 
+    if (!_completedExercises.any((completed) => completed)) {
+      color = Colors.yellow;
+    }
+
     final completedCount =
         _completedExercises.where((completed) => completed).length;
     final totalExercises = widget.exercises.length;
+
 
     // Aquí necesitamos pasar la información al callback
     widget.onEjerciciosActualizados(
@@ -52,10 +63,10 @@ class _DetalleRutinaPageState extends State<DetalleRutinaPage> {
             'Has completado $completedCount de $totalExercises ejercicios.'),
         actions: [
           TextButton(
-            child: Text('OK'),
+            child: const Text('OK'),
             onPressed: () {
               Navigator.pop(context);
-              Navigator.pop(context); // Regresar a la página de calendario
+              Navigator.pop(context,color);
             },
           ),
         ],
@@ -126,11 +137,23 @@ class _DetalleRutinaPageState extends State<DetalleRutinaPage> {
                 },
               ),
             ),
+            SizedBox(height: 16),
+            Text(
+              'Completa al menos 1 ejercicio para terminar la rutina:',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
-                onPressed: _finishRoutine,
-                child: Text('Terminar Rutina'),
+                onPressed:
+                    _completedExercises.any((completed) => completed)
+                        ? _finishRoutine
+                        : null,
+
+              
+                  
+                child: const Text('Terminar Rutina'),
               ),
             ),
           ],
