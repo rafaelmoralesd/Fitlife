@@ -163,6 +163,11 @@ class _RutinaCreationPageState extends State<Crearrutina> {
       ),
     );
   }
+  void _clearText() {
+  _heightController.clear();
+  _weightController.clear();
+  _ageController.clear();
+}
 
   @override
   Widget build(BuildContext context) {
@@ -213,6 +218,7 @@ class _RutinaCreationPageState extends State<Crearrutina> {
                     onPressed: () {
                       _fetchRoutine();
                       _saveUserData();
+                      _clearText();
                     },
                     child: const Text('Obtener una rutina recomendada'),
                   ),
@@ -365,34 +371,44 @@ class _RecommendedRoutinePageState extends State<RecommendedRoutinePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 216, 200, 151),
         title: Text('Rutina Recomendada'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: _routines.length,
-                itemBuilder: (context, index) {
-                  final exercise = _routines[index];
-                  return ListTile(
-                    title: Text(exercise['name']),
-                    subtitle:
-                        Text('${exercise['type']} - ${exercise['difficulty']}'),
-                    trailing: _completionStatus[index]
-                        ? Icon(Icons.check_circle, color: Colors.green)
-                        : Icon(Icons.circle, color: Colors.grey),
-                    onTap: () => _viewExerciseDetail(context, index),
-                  );
-                },
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            opacity: 0.4,
+            image: AssetImage('assets/imagen8.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _routines.length,
+                  itemBuilder: (context, index) {
+                    final exercise = _routines[index];
+                    return ListTile(
+                      title: Text(exercise['name']),
+                      subtitle:
+                          Text('${exercise['type']} - ${exercise['difficulty']}'),
+                      trailing: _completionStatus[index]
+                          ? Icon(Icons.check_circle, color: Colors.green)
+                          : Icon(Icons.circle, color: Colors.grey),
+                      onTap: () => _viewExerciseDetail(context, index),
+                    );
+                  },
+                ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: _showSummary,
-              child: Text('Terminar Rutina'),
-            ),
-          ],
+              ElevatedButton(
+                onPressed: _showSummary,
+                child: Text('Terminar Rutina'),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -515,90 +531,94 @@ class _ExerciseDetailPage2State extends State<ExerciseDetailPage2> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 216, 200, 151),
         title: Text(widget.exercise['name']),
       ),
       body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (_imageUrl.isNotEmpty)
-                  Image.network(
-                    _imageUrl,
-                    height: 200,
-                    width: 200,
-                    fit: BoxFit.cover,
-                  )
-                else
+        child: Container(
+          color: const Color.fromARGB(255, 245, 243, 230),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (_imageUrl.isNotEmpty)
+                    Image.network(
+                      _imageUrl,
+                      height: 200,
+                      width: 200,
+                      fit: BoxFit.cover,
+                    )
+                  else
+                    Text(
+                      'Imagen no disponible',
+                      style: TextStyle(fontSize: 16, color: Colors.red),
+                    ),
+                  SizedBox(height: 16),
                   Text(
-                    'Imagen no disponible',
-                    style: TextStyle(fontSize: 16, color: Colors.red),
+                    'Nombre: ${widget.exercise['name']}',
+                    style: TextStyle(fontSize: 24),
+                    textAlign: TextAlign.center,
                   ),
-                SizedBox(height: 16),
-                Text(
-                  'Nombre: ${widget.exercise['name']}',
-                  style: TextStyle(fontSize: 24),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'Tipo: ${widget.exercise['type']}',
-                  style: TextStyle(fontSize: 18),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'Dificultad: ${widget.exercise['difficulty']}',
-                  style: TextStyle(fontSize: 18),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 32),
-                Text(
-                  'Instrucciones:',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 8),
-                Text(
-                  _instructions,
-                  style: TextStyle(fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 32),
-                ElevatedButton(
-                  onPressed: _startTimer,
-                  child: Text('Empezar Ejercicio'),
-                ),
-                SizedBox(height: 32),
-                Text(
-                  'Tiempo restante: $minutes:$seconds',
-                  style: TextStyle(fontSize: 24),
-                ),
-                SizedBox(height: 16),
-                LinearProgressIndicator(
-                  value: _progress,
-                  backgroundColor: Colors.grey[300],
-                  color: Colors.blue,
-                  minHeight: 10,
-                ),
-                SizedBox(height: 32),
-                ElevatedButton(
-                  onPressed: _canComplete ? () {
-                    widget.onExerciseCompleted();
-                    Navigator.pop(context);
-                  } : null,
-                  child: Text('Marcar como completado'),
-                ),
-                SizedBox(height: 16),
-                if (_exerciseCompleted)
+                  SizedBox(height: 16),
                   Text(
-                    '¡Ejercicio completado!',
-                    style: TextStyle(fontSize: 24, color: Colors.green),
+                    'Tipo: ${widget.exercise['type']}',
+                    style: TextStyle(fontSize: 18),
+                    textAlign: TextAlign.center,
                   ),
-              ],
+                  SizedBox(height: 16),
+                  Text(
+                    'Dificultad: ${widget.exercise['difficulty']}',
+                    style: TextStyle(fontSize: 18),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 32),
+                  Text(
+                    'Instrucciones:',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    _instructions,
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 32),
+                  ElevatedButton(
+                    onPressed: _startTimer,
+                    child: Text('Empezar Ejercicio'),
+                  ),
+                  SizedBox(height: 32),
+                  Text(
+                    'Tiempo restante: $minutes:$seconds',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  SizedBox(height: 16),
+                  LinearProgressIndicator(
+                    value: _progress,
+                    backgroundColor: Colors.grey[300],
+                    color: Colors.blue,
+                    minHeight: 10,
+                  ),
+                  SizedBox(height: 32),
+                  ElevatedButton(
+                    onPressed: _canComplete ? () {
+                      widget.onExerciseCompleted();
+                      Navigator.pop(context);
+                    } : null,
+                    child: Text('Marcar como completado'),
+                  ),
+                  SizedBox(height: 16),
+                  if (_exerciseCompleted)
+                    Text(
+                      '¡Ejercicio completado!',
+                      style: TextStyle(fontSize: 24, color: Colors.green),
+                    ),
+                ],
+              ),
             ),
           ),
         ),

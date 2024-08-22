@@ -104,6 +104,7 @@ class _CustomRoutinePageState extends State<CustomRoutinePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         title: Text('Crear Rutina Personalizada'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -113,65 +114,74 @@ class _CustomRoutinePageState extends State<CustomRoutinePage> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: _exercises.length,
-                itemBuilder: (context, index) {
-                  final exercise = _exercises[index];
-                  return ListTile(
-                    leading: Icon(Icons.fitness_center), // Ícono de fitness
-                    title: Text(exercise['name']!),
-                    subtitle: Text('${exercise['duration']} minutos\n${exercise['description']}'),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () => _removeExercise(index),
-                    ),
-                  );
-                },
+        child: Container(
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                  opacity: 0.4,
+                  image: AssetImage('assets/imagen 4.jpg'),
+                  fit: BoxFit.cover,
+                ),
               ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _exerciseNameController,
-                decoration: InputDecoration(labelText: 'Nombre del Ejercicio'),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _durationController,
-                decoration: InputDecoration(labelText: 'Duración (minutos)'),
-                keyboardType: TextInputType.number,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _descriptionController,
-                decoration: InputDecoration(labelText: 'Descripción'),
-                textAlign: TextAlign.center,
-                maxLines: 4,
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _addExercise,
-                child: Text('Agregar Ejercicio'),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _routineNameController,
-                decoration: InputDecoration(labelText: 'Nombre de la Rutina'),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _saveRoutine,
-                child: Text('Guardar Rutina'),
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: _exercises.length,
+                  itemBuilder: (context, index) {
+                    final exercise = _exercises[index];
+                    return ListTile(
+                      leading: Icon(Icons.fitness_center), // Ícono de fitness
+                      title: Text(exercise['name']!),
+                      subtitle: Text('${exercise['duration']} minutos\n${exercise['description']}'),
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () => _removeExercise(index),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _exerciseNameController,
+                  decoration: InputDecoration(labelText: 'Nombre del Ejercicio'),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _durationController,
+                  decoration: InputDecoration(labelText: 'Duración (minutos)'),
+                  keyboardType: TextInputType.number,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _descriptionController,
+                  decoration: InputDecoration(labelText: 'Descripción'),
+                  textAlign: TextAlign.center,
+                  maxLines: 4,
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: _addExercise,
+                  child: Text('Agregar Ejercicio'),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _routineNameController,
+                  decoration: InputDecoration(labelText: 'Nombre de la Rutina'),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: _saveRoutine,
+                  child: Text('Guardar Rutina'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -67,6 +67,7 @@ class _DetalleRutinaPageState extends State<DetalleRutinaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 216, 200, 151),
         title: Text('Detalles de la Rutina: ${widget.routineName}'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -75,56 +76,65 @@ class _DetalleRutinaPageState extends State<DetalleRutinaPage> {
           },
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: widget.exercises.length,
-              itemBuilder: (context, index) {
-                final exercise = widget.exercises[index];
-                return ListTile(
-                  leading: Icon(Icons.fitness_center),
-                  trailing: IgnorePointer(
-                    ignoring: true,
-                    child: Checkbox(
-                      value: _completedExercises[index],
-                      onChanged: (value) {
-                        setState(() {
-                          _completedExercises[index] = value!;
-                        });
-                      },
-                    ),
-                  ),
-                  title: Text(exercise['name']),
-                  subtitle: Text(
-                      '${exercise['duration']} minutos\n${exercise['description']}'),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ExerciseDetailPage(
-                          exerciseName: exercise['name'],
-                          duration: exercise['duration'],
-                          description: exercise['description'],
-                          onComplete: (name) {
-                            _markAsCompleted(index);
-                          },
-                        ),
+      body: Container(
+          decoration: const BoxDecoration(
+                image: DecorationImage(
+                  opacity: 0.4,
+                  image: AssetImage('assets/imagen8.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: widget.exercises.length,
+                itemBuilder: (context, index) {
+                  final exercise = widget.exercises[index];
+                  return ListTile(
+                    leading: Icon(Icons.fitness_center),
+                    trailing: IgnorePointer(
+                      ignoring: true,
+                      child: Checkbox(
+                        value: _completedExercises[index],
+                        onChanged: (value) {
+                          setState(() {
+                            _completedExercises[index] = value!;
+                          });
+                        },
                       ),
-                    );
-                  },
-                );
-              },
+                    ),
+                    title: Text(exercise['name']),
+                    subtitle: Text(
+                        '${exercise['duration']} minutos\n${exercise['description']}'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ExerciseDetailPage(
+                            exerciseName: exercise['name'],
+                            duration: exercise['duration'],
+                            description: exercise['description'],
+                            onComplete: (name) {
+                              _markAsCompleted(index);
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: _finishRoutine,
-              child: Text('Terminar Rutina'),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: _finishRoutine,
+                child: Text('Terminar Rutina'),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
