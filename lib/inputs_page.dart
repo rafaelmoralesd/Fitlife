@@ -153,20 +153,24 @@ class InputsPage extends StatelessWidget {
     );
   }
 Future<UserCredential> signInWithGoogle() async {
-  // Trigger the authentication flow
+  // Inicia el flujo de autenticación de Google
   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-  // Obtain the auth details from the request
-  final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+  // Si el usuario cancela el flujo de inicio de sesión, googleUser será null
+  if (googleUser == null) {
+    throw Exception('Google sign-in was cancelled');
+  }
 
-  // Create a new credential
-  final credential = GoogleAuthProvider.credential(
-    accessToken: googleAuth?.accessToken,
-    idToken: googleAuth?.idToken,
+  // Obtén los detalles de autenticación del pedido de inicio de sesión
+  final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+  // Crea una credencial para Firebase con el token de Google
+  final AuthCredential credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth.accessToken,
+    idToken: googleAuth.idToken,
   );
 
-  // Once signed in, return the UserCredential
+  // Inicia sesión en Firebase con la credencial de Google
   return await FirebaseAuth.instance.signInWithCredential(credential);
 }
- 
 }
