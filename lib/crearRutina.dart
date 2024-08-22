@@ -225,6 +225,23 @@ class _RutinaCreationPageState extends State<Crearrutina> {
                       onTap: _viewRecommendedRoutine,
                     ),
                   const SizedBox(height: 32),
+                    ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CustomRoutinePage(
+                            onSaveRoutine: (routine) {
+                              _addCustomRoutine(routine);
+                            },
+                          ),
+                        ),
+                      );
+                      _saveUserData();
+                    },
+                    child: Text('Crear Rutina Personalizada'),
+                  ),
+                  const SizedBox(height: 16),
                   Text('Rutinas Creadas:', textAlign: TextAlign.center),
                   const SizedBox(height: 8),
                   const Text('Presione para iniciar cualquier rutina:',
@@ -590,42 +607,3 @@ class _ExerciseDetailPage2State extends State<ExerciseDetailPage2> {
   }
 }
 // Página para mostrar los detalles de la rutina creada
-class DetalleRutinaPage extends StatelessWidget {
-  final List<dynamic> exercises;
-  final String routineName;
-  final Function(DateTime, List<bool>) onEjerciciosActualizados;
-
-  DetalleRutinaPage({
-    required this.exercises,
-    required this.routineName,
-    required this.onEjerciciosActualizados,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(routineName),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text('Detalles de la rutina:'),
-            Expanded(
-              child: ListView.builder(
-                itemCount: exercises.length,
-                itemBuilder: (context, index) {
-                  final exercise = exercises[index];
-                  return ListTile(
-                    title: Text(exercise['name']),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
