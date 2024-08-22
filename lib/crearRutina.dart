@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:myapp/CustomRoutinePage.dart';
-import 'package:myapp/DetalleRutinaPage.dart';
-import 'package:myapp/principal_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
 
+// Página principal para crear y seguir rutinas
 class Crearrutina extends StatefulWidget {
   @override
   _RutinaCreationPageState createState() => _RutinaCreationPageState();
@@ -17,7 +16,7 @@ class _RutinaCreationPageState extends State<Crearrutina> {
   final _heightController = TextEditingController();
 
   List<Map<String, dynamic>> _createdRoutines = [];
-  String _apiResponse = '';
+  List<Map<String, dynamic>> _recommendedRoutines = [];
 
   @override
   void initState() {
@@ -55,18 +54,39 @@ class _RutinaCreationPageState extends State<Crearrutina> {
       return;
     }
 
-    final response = await http.get(Uri.parse(
-        'https://example.com/api/routine?age=$age&weight=$weight&height=$height'));
+    final url = Uri.parse(
+        'https://api.api-ninjas.com/v1/exercises?age=$age&weight=$weight&height=$height');
+    final response = await http.get(url, headers: {
+      'X-Api-Key': 'v5FcedgLdoJXDuWWp9lG4Q==7aEUmAnYP7FW35vK'
+    });
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
+      final data = json.decode(response.body) as List<dynamic>;
+
+      if (data.length < 5) {
+        setState(() {
+          _recommendedRoutines = [];
+        });
+        _showErrorDialog('La API no devolvió suficientes ejercicios.');
+        return;
+      }
+
+      final selectedExercises = data.take(5).map((exercise) {
+        return {
+          'name': exercise['name'],
+          'type': exercise['type'],
+          'difficulty': exercise['difficulty'],
+        };
+      }).toList();
+
       setState(() {
-        _apiResponse = data['routine'];
+        _recommendedRoutines = selectedExercises;
       });
     } else {
       setState(() {
-        _apiResponse = 'Error al obtener la rutina.';
+        _recommendedRoutines = [];
       });
+      _showErrorDialog('Error al obtener la rutina.');
     }
   }
 
@@ -132,25 +152,16 @@ class _RutinaCreationPageState extends State<Crearrutina> {
     );
   }
 
-  List<String> listamuscle = [
-    'abdominales',
-    'abductores',
-    'aductores',
-    'bíceps',
-    'pantorrillas',
-    'pecho',
-    'antebrazos',
-    'glúteos',
-    'hamstrings',
-    'lumbares',
-    'espalda media',
-    'cuello',
-    'cuádriceps',
-    'trapecios',
-    'tríceps'
-  ];
-
-  List<String> listadifficulty = ['principiante', 'intermedio', 'avanzado'];
+  void _viewRecommendedRoutine() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => RecommendedRoutinePage(
+          recommendedRoutines: _recommendedRoutines,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,16 +170,15 @@ class _RutinaCreationPageState extends State<Crearrutina> {
         automaticallyImplyLeading: false,
         backgroundColor: Color.fromARGB(255, 184, 192, 241),
         title: Text('Crear y Seguir Rutinas'),
-        
       ),
       body: Container(
-          decoration: const BoxDecoration(
-                image: DecorationImage(
-                  opacity: 0.4,
-                  image: AssetImage('assets/imagen 4.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            opacity: 0.4,
+            image: AssetImage('assets/imagen 4.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: SingleChildScrollView(
           child: Center(
             child: Padding(
@@ -198,22 +208,6 @@ class _RutinaCreationPageState extends State<Crearrutina> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
-                  DropdownButtonFormField<String>(
-                    items: listamuscle.map((String muscle) {
-                      return DropdownMenuItem<String>(
-                        child: Text(muscle),
-                        value: muscle,
-                      );
-                    }).toList(),
-                    onChanged: (String? value) {
-                      print(value);
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Selecciona un musculo (ocional)',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
                       _fetchRoutine();
@@ -222,26 +216,14 @@ class _RutinaCreationPageState extends State<Crearrutina> {
                     child: const Text('Obtener una rutina recomendada'),
                   ),
                   const SizedBox(height: 16),
-                  const Text('Rutina Recomendada:'),
-                  Text(_apiResponse, textAlign: TextAlign.center),
+                  if (_recommendedRoutines.isNotEmpty)
+                    ListTile(
+                      title: Text('Rutina Recomendada'),
+                      subtitle: Text('5 ejercicios seleccionados para ti'),
+                      trailing: Icon(Icons.arrow_forward),
+                      onTap: _viewRecommendedRoutine,
+                    ),
                   const SizedBox(height: 32),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CustomRoutinePage(
-                            onSaveRoutine: (routine) {
-                              _addCustomRoutine(routine);
-                            },
-                          ),
-                        ),
-                      );
-                      _saveUserData();
-                    },
-                    child: Text('Crear Rutina Personalizada'),
-                  ),
-                  const SizedBox(height: 16),
                   Text('Rutinas Creadas:', textAlign: TextAlign.center),
                   const SizedBox(height: 8),
                   const Text('Presione para iniciar cualquier rutina:',
@@ -280,6 +262,192 @@ class _RutinaCreationPageState extends State<Crearrutina> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// Página para mostrar la rutina recomendada
+class RecommendedRoutinePage extends StatefulWidget {
+  final List<Map<String, dynamic>> recommendedRoutines;
+
+  RecommendedRoutinePage({required this.recommendedRoutines});
+
+  @override
+  _RecommendedRoutinePageState createState() => _RecommendedRoutinePageState();
+}
+
+class _RecommendedRoutinePageState extends State<RecommendedRoutinePage> {
+  late List<Map<String, dynamic>> _routines;
+  late List<bool> _completionStatus;
+
+  @override
+  void initState() {
+    super.initState();
+    _routines = widget.recommendedRoutines;
+    _completionStatus = List.generate(_routines.length, (_) => false);
+  }
+
+  void _updateExerciseStatus(int index) {
+    setState(() {
+      _completionStatus[index] = !_completionStatus[index];
+    });
+  }
+
+  void _viewExerciseDetail(BuildContext context, int index) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ExerciseDetailPage2(
+          exercise: _routines[index],
+          onExerciseCompleted: () => _updateExerciseStatus(index),
+        ),
+      ),
+    );
+  }
+
+  void _showSummary() {
+    final completedExercises = _routines
+        .asMap()
+        .entries
+        .where((entry) => _completionStatus[entry.key])
+        .map((entry) => entry.value['name'].toString())
+        .toList();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Resumen de la Rutina'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Ejercicios Completados:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            ...completedExercises.map((exercise) => ListTile(
+                  title: Text(exercise),
+                )),
+          ],
+        ),
+        actions: [
+          TextButton(
+            child: Text('Cerrar'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Rutina Recomendada'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: _routines.length,
+                itemBuilder: (context, index) {
+                  final exercise = _routines[index];
+                  return ListTile(
+                    title: Text(exercise['name']),
+                    subtitle: Text('${exercise['type']} - ${exercise['difficulty']}'),
+                    trailing: _completionStatus[index]
+                        ? Icon(Icons.check_circle, color: Colors.green)
+                        : Icon(Icons.circle, color: Colors.grey),
+                    onTap: () => _viewExerciseDetail(context, index),
+                  );
+                },
+              ),
+            ),
+            ElevatedButton(
+              onPressed: _showSummary,
+              child: Text('Terminar Rutina'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Página para mostrar detalles de un ejercicio
+class ExerciseDetailPage2 extends StatelessWidget {
+  final Map<String, dynamic> exercise;
+  final VoidCallback onExerciseCompleted;
+
+  ExerciseDetailPage2({required this.exercise, required this.onExerciseCompleted});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(exercise['name']),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text('Tipo: ${exercise['type']}'),
+            Text('Dificultad: ${exercise['difficulty']}'),
+            ElevatedButton(
+              onPressed: () {
+                onExerciseCompleted();
+                Navigator.pop(context);
+              },
+              child: Text('Marcar como completado'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Página para mostrar los detalles de la rutina creada
+class DetalleRutinaPage extends StatelessWidget {
+  final List<dynamic> exercises;
+  final String routineName;
+  final Function(DateTime, List<bool>) onEjerciciosActualizados;
+
+  DetalleRutinaPage({
+    required this.exercises,
+    required this.routineName,
+    required this.onEjerciciosActualizados,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(routineName),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text('Detalles de la rutina:'),
+            Expanded(
+              child: ListView.builder(
+                itemCount: exercises.length,
+                itemBuilder: (context, index) {
+                  final exercise = exercises[index];
+                  return ListTile(
+                    title: Text(exercise['name']),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
