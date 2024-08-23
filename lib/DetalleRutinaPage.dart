@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/ExerciseDetailPage.dart'; // Asegúrate de que el import sea correcto
+import 'package:myapp/ExerciseDetailPage.dart';
+import 'package:myapp/calendario.dart'; // Asegúrate de que el import sea correcto
 
 class DetalleRutinaPage extends StatefulWidget {
   final List<dynamic> exercises;
@@ -66,7 +67,8 @@ class _DetalleRutinaPageState extends State<DetalleRutinaPage> {
             child: const Text('OK'),
             onPressed: () {
               Navigator.pop(context);
-              Navigator.pop(context,color);
+               Navigator.push(context, MaterialPageRoute(builder: (context) => CalendarioPage()));
+              
             },
           ),
         ],
@@ -150,6 +152,7 @@ class _DetalleRutinaPageState extends State<DetalleRutinaPage> {
                     _completedExercises.any((completed) => completed)
                         ? _finishRoutine
                         : null,
+                        
 
               
                   

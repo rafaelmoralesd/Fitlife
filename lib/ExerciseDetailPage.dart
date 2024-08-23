@@ -139,13 +139,7 @@ class _ExerciseDetailPageState extends State<ExerciseDetailPage> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
-                _imageUrl.isNotEmpty
-                    ? Image.network(
-                        _imageUrl,
-                        height: 150, // Puedes ajustar la altura según tus necesidades
-                        width: 150,  // Puedes ajustar el ancho según tus necesidades
-                      )
-                    : CircularProgressIndicator(),
+               Image.asset(height: 200, width: 200, 'assets/ejerciciosejemplo.jpg'),
                 const SizedBox(height: 32),
                 LinearProgressIndicator(
                   value: progress,

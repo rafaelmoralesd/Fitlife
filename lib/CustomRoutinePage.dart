@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomRoutinePage extends StatefulWidget {
   final Function(Map<String, dynamic>) onSaveRoutine;
@@ -59,7 +60,8 @@ class _CustomRoutinePageState extends State<CustomRoutinePage> {
 
   void _saveRoutine() {
     final routineName = _routineNameController.text;
-
+    
+  
     if (routineName.isEmpty) {
       _showErrorDialog('El nombre de la rutina es obligatorio.');
       return;
@@ -69,6 +71,7 @@ class _CustomRoutinePageState extends State<CustomRoutinePage> {
       _showErrorDialog('Debes agregar al menos dos ejercicios para guardar la rutina.');
       return;
     }
+    
 
     widget.onSaveRoutine({
       'name': routineName,
@@ -153,9 +156,13 @@ class _CustomRoutinePageState extends State<CustomRoutinePage> {
                 const SizedBox(height: 16),
                 TextField(
                   controller: _durationController,
+                   inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly, // Permite solo números
+                ],
                   decoration: InputDecoration(labelText: 'Duración (minutos)'),
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,
+                  
                 ),
                 const SizedBox(height: 16),
                 TextField(
