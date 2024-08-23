@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:myapp/CustomRoutinePage.dart';
 import 'package:myapp/DetalleRutinaPage.dart';
+import 'package:myapp/calendario.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
@@ -361,7 +362,7 @@ class _RecommendedRoutinePageState extends State<RecommendedRoutinePage> {
             child: Text('Cerrar'),
             onPressed: () {
               Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (context) => CalendarioPage()));
             },
           ),
         ],

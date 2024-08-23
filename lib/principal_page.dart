@@ -25,7 +25,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
           physics: const NeverScrollableScrollPhysics(),
           children: [
             const HomeMenuPage(),
-            const CalendarioPage(),
+             CalendarioPage(),
              Crearrutina(),
             ProfilePage(),
             Container(
